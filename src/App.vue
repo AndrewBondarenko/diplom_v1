@@ -11,6 +11,7 @@
       <div class="nav_menu">
         <router-link to="/">Головна</router-link>
         <router-link to="/about">Довiдка</router-link>
+        <router-link to="/login">Вийти</router-link>
       </div>
     </div>
     <router-view/>
