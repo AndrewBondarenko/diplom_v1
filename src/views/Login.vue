@@ -6,14 +6,14 @@
         <h4>ВХIД В СИСТЕМУ</h4>
       </div>
       <div class="input-group">
-        <input type="text" id="name" placeholder="Username" />
+        <input v-model="username" type="text" id="name" placeholder="Username" />
         <!--<label for="name">Username</label>-->
       </div>
       <div class="input-group">
-        <input type="password" id="password" placeholder="Password" />
+        <input v-model="password" type="password" id="password" placeholder="Password" />
         <!--<label for="password">Password</label>-->
       </div>
-      <div class="form-button">УВIЙТИ</div>
+      <div @click="log(username, password)" class="form-button">УВIЙТИ</div>
 
     </div>
   </div>
@@ -24,6 +24,35 @@ export default {
   name: 'login',
   props: {
 
+  },
+  data: function(){
+    return {
+      username: '',
+      password: '',
+      error: false
+    }
+  },
+  methods: {
+    log: function(login, password) {
+
+      for (var i = 0; i < this.$root.users.data.length; i++) {
+        console.log(password == this.$root.users.data[i].password)
+        if (
+                login == this.$root.users.data[i].username &&
+                password == this.$root.users.data[i].password
+        ) {
+          this.$root.currentUser = this.$root.users.data[i].username;
+          var v = encodeURIComponent(document.lastModified);
+          document.cookie = "user=" + this.$root.currentUser
+          break;
+        } else {
+          this.error = true;
+        }
+      }
+      if (this.$root.currentUser == "" && this.error == true) {
+        alert("Не правильний логiн або пароль");
+      } else return true;
+    },
   }
 }
 </script>

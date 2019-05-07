@@ -1,5 +1,6 @@
 <template>
-  <div class="main">
+  <div>
+  <div v-if="$root.currentUser!=''" class="main">
     <div class="main-content">
       <h2>Вхiднi данi</h2>
       <div class="main-content_input_data">
@@ -93,6 +94,10 @@
       </div>
     </div>
   </div>
+  <div v-else>
+       <Login></Login>
+  </div>
+  </div>
 </template>
 
 <script>
@@ -100,13 +105,15 @@
 import Multiselect from 'vue-multiselect';
 import Steps from '../components/Step';
 import Stages from '../components/Stage';
+import Login from '../views/Login';
 
 export default {
   name: 'main',
   components: {
     Multiselect,
     Steps,
-    Stages
+    Stages,
+    Login
   },
   data(){
     return{

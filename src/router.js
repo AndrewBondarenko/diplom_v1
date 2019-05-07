@@ -8,11 +8,7 @@ export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    {
-      path: '/',
-      name: 'main',
-      component: Main
-    },
+
     {
       path: '/about',
       name: 'about',
@@ -24,7 +20,7 @@ export default new Router({
       }
     },
     {
-      path: '/login',
+      path: '/',
       name: 'login',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
@@ -32,6 +28,11 @@ export default new Router({
       component: function () {
         return import(/* webpackChunkName: "login" */ './views/Login.vue')
       }
-    }
+    },
+    {
+      path: '/main',
+      name: 'main',
+      component: Main
+    },
   ]
 })

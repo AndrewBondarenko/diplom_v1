@@ -9,14 +9,37 @@
          сировини у біореакторі</h4>
       </div>
       <div class="nav_menu">
-        <router-link to="/">Головна</router-link>
-        <router-link to="/about">Довiдка</router-link>
-        <router-link to="/login">Вийти</router-link>
+        <div class="nav-item">
+          <router-link v-if="$root.currentUser!=''" to="/main">Головна</router-link>
+        </div>
+        <div class="nav-item">
+          <router-link to="/about">Довiдка</router-link>
+        </div>
+        <div class="nav-item" v-if="$root.currentUser!=''">
+          <router-link  to="/"><span @click="unlog">Вийти</span></router-link>
+        </div>
+        <div  class="nav-item" v-else>
+          <router-link  to="/"><span @click="unlog">Увiйти</span></router-link>
+        </div>
       </div>
     </div>
     <router-view/>
   </div>
 </template>
+
+
+<script>
+  export default {
+    name: 'app',
+    methods: {
+      unlog(){
+        this.$root.currentUser = '';
+        document.cookie = 'user='
+      }
+    }
+  }
+</script>
+
 
 <style lang="sass">
 
@@ -55,6 +78,9 @@
       text-align: left
     .nav_menu
       margin: auto 45px auto auto
+      display: flex
+      .nav-item
+       flex-direction: row
 
 
 </style>
