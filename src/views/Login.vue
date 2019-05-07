@@ -1,20 +1,34 @@
 <template>
   <div class="login-container">
-    <div class="modal">
-
-      <div class="form-title">
-        <h4>ВХIД В СИСТЕМУ</h4>
+    <div v-if="$root.currentUser ==''" class="modal">
+      <div v-if="validation" class="form-validation">
+        <h4>Неправильний логін або пароль</h4>
       </div>
-      <div class="input-group">
-        <input v-model="username" type="text" id="name" placeholder="Username" />
+      <div class="form-title">
+        <h2>ВХIД В СИСТЕМУ</h2>
+      </div>
+      <div class="input-group" v-bind:class="{ invalidValidation: validation }">
+        <input v-model="username" type="text" id="name" placeholder="Логiн" />
         <!--<label for="name">Username</label>-->
       </div>
-      <div class="input-group">
-        <input v-model="password" type="password" id="password" placeholder="Password" />
+      <div class="input-group" v-bind:class="{ invalidValidation: validation }">
+        <input v-model="password" type="password" id="password" placeholder="Пароль" />
         <!--<label for="password">Password</label>-->
       </div>
       <div @click="log(username, password)" class="form-button">УВIЙТИ</div>
 
+    </div>
+    <div v-else>
+      <div class="modal">
+        <div class="form-title successfulLogin">
+          <h1>ВІТАЄМО!</h1>
+          <h3>Авторизацiя прошла успiшно</h3>
+          <img src="../assets/images/done.png" alt="done">
+          <h3>
+            <router-link to="/main">Перейти на головну сторiнку</router-link>
+          </h3>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +43,8 @@ export default {
     return {
       username: '',
       password: '',
-      error: false
+      error: false,
+      validation: false
     }
   },
   methods: {
@@ -43,14 +58,15 @@ export default {
         ) {
           this.$root.currentUser = this.$root.users.data[i].username;
           var v = encodeURIComponent(document.lastModified);
-          document.cookie = "user=" + this.$root.currentUser
+          document.cookie = "user=" + this.$root.currentUser;
           break;
         } else {
           this.error = true;
         }
       }
       if (this.$root.currentUser == "" && this.error == true) {
-        alert("Не правильний логiн або пароль");
+        // alert("Неправильний логін або пароль");
+        this.validation = true;
       } else return true;
     },
   }
@@ -86,8 +102,8 @@ export default {
     transform-origin: center center
 
   .form-title
-    margin-bottom: 15px
-    h4
+    margin-bottom: 30px
+    h2
       color: #42b983
 
   .form-button
@@ -96,6 +112,7 @@ export default {
     color: #42b983
     margin-top: 30px
     max-width: 300px
+    font-weight: bold
     text-align: center
     border: solid 1.5px #42b983
     background-color: #fff
@@ -123,5 +140,31 @@ export default {
       font-size: 16px
       border-bottom: solid 1.5px #42b983
       background-color: transparent
+
+  .invalidValidation
+    input
+      border-bottom: solid 1.5px #e02340
+
+  .form-validation
+    margin-bottom: 65px
+    margin-top: -83px
+    h4
+      color: #e02340
+
+  .successfulLogin
+    margin-top: 20px
+    h1
+      margin-bottom: 30px
+      color: #42b983
+    h3
+      margin-bottom: 10px
+      color: #42b983
+      a
+        color: #42b983
+
+    img
+      height: 90px
+      width: 90px
+      margin: 20px 0
 
 </style>

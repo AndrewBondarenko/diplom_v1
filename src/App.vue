@@ -77,7 +77,7 @@
       color: white
       text-align: left
     .nav_menu
-      margin: auto 45px auto auto
+      margin: auto 67px auto auto
       display: flex
       .nav-item
        flex-direction: row
