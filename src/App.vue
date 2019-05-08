@@ -15,11 +15,11 @@
         <div class="nav-item">
           <router-link to="/about">Довiдка</router-link>
         </div>
-        <div class="nav-item" v-if="$root.currentUser!=''">
-          <router-link  to="/"><span @click="unlog">Вийти</span></router-link>
+        <div @click="unlog" class="nav-item" v-if="$root.currentUser!=''">
+          <router-link  to="/"><span>Вийти</span></router-link>
         </div>
-        <div  class="nav-item" v-else>
-          <router-link  to="/"><span @click="unlog">Увiйти</span></router-link>
+        <div @click="unlog" class="nav-item" v-else>
+          <router-link  to="/"><span>Увiйти</span></router-link>
         </div>
       </div>
     </div>
