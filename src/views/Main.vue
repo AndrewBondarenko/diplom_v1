@@ -2,7 +2,9 @@
   <div>
   <div v-if="$root.currentUser!=''" class="main">
     <div class="main-content">
-      <h2>Вхiднi данi</h2>
+      <div class="main-content_title">
+        <h2>Вхiднi данi</h2>
+      </div>
       <div class="main-content_input_data">
         <div class="main-content-input">
           <h4>Сировина</h4>
@@ -69,19 +71,44 @@
         </div>
       </div>
 
-      <h2>Результат</h2>
+      <div class="main-content_title">
+        <h2>Результат</h2>
+      </div>
+      <div class="main-content_result main-content_result_border_top ">
+        <div class="main-content_result_empty"></div>
+      </div>
+      <div class="main-content_result_title">
+        <h3>Основнi параметри процесу</h3>
+      </div>
       <div class="main-content_result">
-        <div class="main-content-result_graphic_set">
-          <div class="main-content-result_graphic">
-            <img src="../assets/images/graphic.jpg" alt="Graphic">
-          </div>
-          <div class="main-content-result_graphic">
-            <img src="../assets/images/graphic.jpg" alt="Graphic">
+        <div class="main-content-result_description">
+            <ResultItem
+                    v-for="result in totalResult"
+                    v-bind:param="result.param"
+                    v-bind:value="result.value"
+            ></ResultItem>
+        </div>
+      </div>
+      <div class="main-content_result_title">
+        <h3>Графiки</h3>
+      </div>
+      <div class="main-content_result">
+        <div class="main-content-result_description">
+          <div class="main-content-result_graphic_set">
+            <div class="main-content-result_graphic">
+              <img src="../assets/images/graphic.jpg" alt="Graphic">
+            </div>
+            <div class="main-content-result_graphic">
+              <img src="../assets/images/graphic.jpg" alt="Graphic">
+            </div>
           </div>
         </div>
-
+      </div>
+      <div class="main-content_result_title">
+        <h3>Основнi етапи процесу видобутку водню</h3>
+      </div>
+      <div class="main-content_result  main-content_result_border_bottom">
         <div class="main-content-result_description">
-
           <Stages
                   v-for="stage in stages"
                   v-bind:stageNumber="stage.id"
@@ -89,8 +116,23 @@
                   v-bind:stageSet="stage.stageSet"
                   v-bind:allStages="allStages"
           ></Stages>
-
         </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="nav_menu">
+          <div class="nav-item">
+            <router-link to="/main">Головна</router-link>
+          </div>
+          <div class="nav-item">
+            <router-link to="/about">Довiдка</router-link>
+          </div>
+          <div @click="unlog" class="nav-item">
+            <router-link  to="/login"><span>Вийти</span></router-link>
+          </div>
+      </div>
+      <div class="footer_year">
+        <h4>Kyiv 2019</h4>
       </div>
     </div>
   </div>
@@ -106,6 +148,7 @@ import Multiselect from 'vue-multiselect';
 import Steps from '../components/Step';
 import Stages from '../components/Stage';
 import Login from '../views/Login';
+import ResultItem from '../components/ResultItem'
 
 export default {
   name: 'main',
@@ -113,7 +156,8 @@ export default {
     Multiselect,
     Steps,
     Stages,
-    Login
+    Login,
+    ResultItem
   },
   data(){
     return{
@@ -149,7 +193,13 @@ export default {
         stage8: [],
         stage9: [],
       },
-
+      totalResult: [
+        { param: "Тривалiсть процесу", value: "T = 240год" },
+        { param: "Тривалiсть процесу", value: "T = 240год" },
+        { param: "Тривалiсть процесу", value: "T = 240год" },
+        { param: "Тривалiсть процесу", value: "T = 240год" },
+        { param: "Тривалiсть процесу", value: "T = 240год" },
+      ]
     }
   },
   methods: {
@@ -252,40 +302,33 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped lang="sass">
 
-  .main
-    display: flex
-    width: 100%
-
   .main-content
     display: flex
-    width: 90%
-    margin-left: auto
-    margin-right: auto
+    width: 100%
     flex-direction: column
     h2
       text-align: left
 
+  .main-content_title
+    width: 90%
+    margin: 0 auto
+    text-align: left
+
   .main-content_input_data
     display: flex
-    width: auto
+    width: 90%
+    box-sizing: border-box
+    margin: 0 auto 15px auto
     border: 1px solid #262626
     flex-direction: row
     flex-wrap: wrap
     justify-content: flex-start
     padding: 10px
     height: 230px
-    margin-bottom: 15px
-    background: url("../assets/images/bioreactor.jpg") no-repeat
-    background-position-x: right
-    background-position-y: bottom
-    background-origin: content-box
-
-  .main-content_result
-    display: flex
-    flex-direction: column
-    width: auto
-    border: 1px solid #262626
-
+    /*background: url("../assets/images/bioreactor.jpg") no-repeat*/
+    /*background-position-x: right*/
+    /*background-position-y: bottom*/
+    /*background-origin: content-box*/
   .main-content-input
     width: 270px
     height: auto
@@ -314,6 +357,22 @@ export default {
       background-color: #42b983
       color: white
 
+  .main-content_result
+    display: flex
+    flex-direction: column
+    width: 90%
+    margin: 0 auto
+    border-left: 1px solid #262626
+    border-right: 1px solid #262626
+
+  .main-content_result_border_top
+    border-top: 1px solid #262626
+
+  .main-content_result_border_bottom
+    border-bottom: 1px solid #262626
+
+  .main-content_result_empty
+    height: 20px
 
   .main-content-result_graphic_set
     display: flex
@@ -332,63 +391,47 @@ export default {
       height: 350px
       width: 500px
 
+  .main-content_result_title
+    display: flex
+    width: 95%
+    background-color: #42b983
+    margin: 0 auto
+    h3
+      margin-right: auto
+      color: white
+      padding: 4px 22px
+
   .main-content-result_description
     display: flex
     flex-direction: column
     width: 90%
     margin: 20px auto
-    .result-description-stage
-      margin-top: 0
-      .result-description-stage_title
-        display: flex
-        margin-right: auto
-        flex-direction: column
-        background-color: #42b983
-        background-size: 100%
-        /*border-left: 5px solid white*/
-        h3
-          width: max-content
-          margin: 10px auto 5px 0
-          padding-left: 10px
-          color: #fff
-        h4
-          width: max-content
-          margin: 0 auto 10px 0
-          padding-left: 10px
-          color: #fff
 
-      .result-description-stage_content
-        margin: 5px auto 15px auto
-        .result-description-step
-          display: flex
-          flex-direction: column
-          width: 95%
-          margin: 10px auto
-          .result-description-step_title
-            display: flex
-            margin-right: auto
-            h4
-              margin: 7px auto 7px 0
-          .result-description-step_content
-            display: flex
-            flex-direction: row
-            border: 1px solid #bbb
-            .result-description-step_content_description
-              width: 60%
-              height: 100%
-              border-right: 1px dashed #bbb
-              padding: 5px
-              p
-                width: max-content
-                margin: 5px auto 5px 10px
-            .result-description-step_content_param
-              width: 40%
-              height: 100%
-              padding: 5px
-              p
-                width: max-content
-                margin: 5px auto 5px 15px
-
+  .footer
+    height: auto
+    padding: 0 10px
+    background-color: #42b983
+    margin-top: 60px
+    display: flex
+    flex-direction: column
+    h4
+      color: #fff
+    a
+      font-weight: bold
+      color: white
+      text-decoration: none
+      padding: 10px 15px 10px 15px
+      margin: 0 15px 0 15px
+      &.router-link-exact-active
+        color: white
+      &:hover
+        border-bottom: 2px solid white
+        border-top: 2px solid white
+    .nav_menu
+      margin: 25px auto
+      display: flex
+      .nav-item
+        flex-direction: row
 
   .mainInputMultiselect::v-deep
     height: 30px

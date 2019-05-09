@@ -16,10 +16,10 @@
           <router-link to="/about">Довiдка</router-link>
         </div>
         <div @click="unlog" class="nav-item" v-if="$root.currentUser!=''">
-          <router-link  to="/"><span>Вийти</span></router-link>
+          <router-link  to="/login"><span>Вийти</span></router-link>
         </div>
         <div @click="unlog" class="nav-item" v-else>
-          <router-link  to="/"><span>Увiйти</span></router-link>
+          <router-link  to="/login"><span>Увiйти</span></router-link>
         </div>
       </div>
     </div>

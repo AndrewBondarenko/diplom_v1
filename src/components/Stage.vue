@@ -49,7 +49,6 @@
             flex-direction: column
             background-color: #42b983
             background-size: 100%
-            /*border-left: 5px solid white*/
             h3
                 width: max-content
                 margin: 10px auto 5px 0
