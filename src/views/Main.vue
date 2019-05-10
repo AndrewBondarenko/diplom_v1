@@ -120,17 +120,6 @@
       </div>
     </div>
     <div class="footer">
-      <div class="nav_menu">
-          <div class="nav-item">
-            <router-link to="/main">Головна</router-link>
-          </div>
-          <div class="nav-item">
-            <router-link to="/about">Довiдка</router-link>
-          </div>
-          <div @click="unlog" class="nav-item">
-            <router-link  to="/login"><span>Вийти</span></router-link>
-          </div>
-      </div>
       <div class="footer_year">
         <h4>Kyiv 2019</h4>
       </div>
