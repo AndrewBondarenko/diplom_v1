@@ -1,7 +1,7 @@
 <template>
   <div>
-  <!--<div v-if="$root.currentUser!=''" class="main">-->
-    <div v-if="$root.currentUser ==''" class="main">
+  <div v-if="$root.currentUser!=''" class="main">
+    <!--<div v-if="$root.currentUser ==''" class="main">-->
     <div class="main-content">
       <div class="main-content_title">
         <h2>Вхiднi данi</h2>
@@ -51,7 +51,7 @@
         </div>
         <div class="main-content-input">
           <h4>Кислотнiсть (pH)</h4>
-           <input type="text" placeholder="Кислотнiсть" class="main-content-input_field" />
+           <input type="number" placeholder="Кислотнiсть" class="main-content-input_field" />
         </div>
         <div class="main-content-input">
           <h4>Подрiбненiсть</h4>
@@ -96,7 +96,7 @@
         <h3>Основнi параметри процесу</h3>
       </div>
       <div class="main-content_result">
-        <div class="main-content-result_description">
+        <div class="main-content-result_description" v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
 
           <div class="result-item_title">
             <h4>Попередня обробка сировини</h4>
@@ -116,6 +116,11 @@
           ></ResultItem>
 
         </div>
+
+        <div class="main-content-result_description main-content-input_empty" v-else>
+          <h3>ФОРМА НЕ ЗАПОВНЕНА</h3>
+        </div>
+
       </div>
       <div class="main-content_result_title">
         <h3>Графiки</h3>
@@ -136,7 +141,7 @@
         <h3>Основнi етапи процесу видобутку водню</h3>
       </div>
       <div class="main-content_result  main-content_result_border_bottom">
-        <div class="main-content-result_description">
+        <div class="main-content-result_description" v-if="allStages.stage1.length != 0">
           <Stages
                   v-for="stage in stages"
                   v-bind:stageNumber="stage.id"
@@ -145,6 +150,11 @@
                   v-bind:allStages="allStages"
           ></Stages>
         </div>
+
+        <div class="main-content-result_description main-content-input_empty" v-else>
+          <h3>ФОРМА НЕ ЗАПОВНЕНА</h3>
+        </div>
+
       </div>
     </div>
     <!--<div class="footer">-->
@@ -241,10 +251,12 @@ export default {
         )
       }
 
-      if ( (this.valueLignin === '0% - 10%' && this.valueCellulose === '30% - 40%') ||
+      if ( ((this.valueLignin === '0% - 10%' && this.valueCellulose === '30% - 40%') ||
            (this.valueLignin === '10% - 20%' && this.valueCellulose === '30% - 40%') ||
            (this.valueLignin === '0% - 10%' && this.valueCellulose === '40% <') ||
-           (this.valueLignin === '10% - 20%' && this.valueCellulose === '40% <')){
+           (this.valueLignin === '10% - 20%' && this.valueCellulose === '40% <')) &&
+           (this.value1 ==='солома ячменю' || this.value1 === 'вiдходи кукурудзи')
+        ){
         this.totalResult.preProc.push(
                 {param: 'Метод попередньої обробки', value: 'пар'}
         );
@@ -438,6 +450,10 @@ export default {
       border: 2px solid #42b983
       background-color: #42b983
       color: white
+
+  .main-content-input_empty
+    h3
+      opacity: 0.4
 
   .main-content_result
     display: flex
