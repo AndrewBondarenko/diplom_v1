@@ -29,7 +29,7 @@
         border-bottom: 1px solid #b7c2ce
         padding: 12px 2px
         &:hover
-            background-color: #f9fafc
+            background-color: #f3f4f6
 
     .result-item_param
         width: max-content

@@ -1,6 +1,7 @@
 <template>
   <div>
-  <div v-if="$root.currentUser!=''" class="main">
+  <!--<div v-if="$root.currentUser!=''" class="main">-->
+    <div v-if="$root.currentUser ==''" class="main">
     <div class="main-content">
       <div class="main-content_title">
         <h2>Вхiднi данi</h2>
@@ -25,8 +26,22 @@
           <div class="main-content-input-multiselect">
             <multiselect
                     class="mainInputMultiselect"
-                    v-model="value2"
+                    v-model="valueLignin"
                     :options="lignin"
+                    :show-labels="false"
+                    :close-on-select="true"
+                    :clear-on-select="false"
+                    placeholder="Вмiст лiгнiну">
+            </multiselect>
+          </div>
+        </div>
+        <div class="main-content-input">
+          <h4>Вмiст целюлози</h4>
+          <div class="main-content-input-multiselect">
+            <multiselect
+                    class="mainInputMultiselect"
+                    v-model="valueCellulose"
+                    :options="cellulose"
                     :show-labels="false"
                     :close-on-select="true"
                     :clear-on-select="false"
@@ -82,11 +97,24 @@
       </div>
       <div class="main-content_result">
         <div class="main-content-result_description">
-            <ResultItem
-                    v-for="result in totalResult"
-                    v-bind:param="result.param"
-                    v-bind:value="result.value"
-            ></ResultItem>
+
+          <div class="result-item_title">
+            <h4>Попередня обробка сировини</h4>
+          </div>
+          <ResultItem
+                  v-for="result in totalResult.preProc"
+                  v-bind:param="result.param"
+                  v-bind:value="result.value"
+          ></ResultItem>
+          <div class="result-item_title">
+            <h4>Процес видобутку водню</h4>
+          </div>
+          <ResultItem
+                  v-for="result in totalResult.mainProc"
+                  v-bind:param="result.param"
+                  v-bind:value="result.value"
+          ></ResultItem>
+
         </div>
       </div>
       <div class="main-content_result_title">
@@ -119,11 +147,11 @@
         </div>
       </div>
     </div>
-    <div class="footer">
-      <div class="footer_year">
-        <h4>Kyiv 2019</h4>
-      </div>
-    </div>
+    <!--<div class="footer">-->
+      <!--<div class="footer_year">-->
+        <!--<h4>Kyiv 2019</h4>-->
+      <!--</div>-->
+    <!--</div>-->
   </div>
   <div v-else>
        <Login></Login>
@@ -151,12 +179,14 @@ export default {
   data(){
     return{
       value1: null,
-      value2: null,
+      valueLignin: null,
       value3: null,
       value4: null,
+      valueCellulose: null,
       selected: '',
       raw: ['солома пшеницi', 'солома ячменю', 'вiдходи кукурудзи', 'вiдходи рiпаку', 'вiдходи соняшника', 'деревина берези', 'деревина сосни'],
-      lignin: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% - 50%','50% <'],
+      lignin: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
+      cellulose: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
       shredding: ['мiлкоподрiбнена','середньоподрiбнена','крупноподрiбнена'],
       fulness: ['> 30%','30% - 40%','40% - 50%','50% - 60%','60% - 70%','70% - 80%','80% - 90%','90% - 100%'],
       stages: [
@@ -182,13 +212,10 @@ export default {
         stage8: [],
         stage9: [],
       },
-      totalResult: [
-        { param: "Тривалiсть процесу", value: "T = 240год" },
-        { param: "Тривалiсть процесу", value: "T = 240год" },
-        { param: "Тривалiсть процесу", value: "T = 240год" },
-        { param: "Тривалiсть процесу", value: "T = 240год" },
-        { param: "Тривалiсть процесу", value: "T = 240год" },
-      ]
+      totalResult: {
+        preProc: [],
+        mainProc: [],
+      }
     }
   },
   methods: {
@@ -203,10 +230,73 @@ export default {
       this.allStages.stage7.length = 0;
       this.allStages.stage8.length = 0;
       this.allStages.stage9.length = 0;
+      this.totalResult.preProc.length = 0;
+      this.totalResult.mainProc.length = 0;
+
       var stepCount = 0;
 
-      if (this.value2 === '0% - 10%' ||
-      this.value2 === '10% - 20%' ||
+      if (this.value3 !== 'мiлкоподрiбнена'){
+        this.totalResult.preProc.push(
+                {param: 'Подрібнення біоенергетичної сировини', value: 'dч = 1-3 мм'}
+        )
+      }
+
+      if ( (this.valueLignin === '0% - 10%' && this.valueCellulose === '30% - 40%') ||
+           (this.valueLignin === '10% - 20%' && this.valueCellulose === '30% - 40%') ||
+           (this.valueLignin === '0% - 10%' && this.valueCellulose === '40% <') ||
+           (this.valueLignin === '10% - 20%' && this.valueCellulose === '40% <')){
+        this.totalResult.preProc.push(
+                {param: 'Метод попередньої обробки', value: 'пар'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Тривалiсть попередньої обробки', value: ' τ = 1 год'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Температура при попереднiй обробцi', value: 'Т = 130-140 °C'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Тиск при попереднiй обробцi', value: 'Р = 250-300 кПа'}
+        )
+      }
+      else{
+        this.totalResult.preProc.push(
+                {param: 'Метод попередньої обробки', value: 'луг (NaOH)'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Концентрацiя лугу', value: ' 2 моль/дм3'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Тривалiсть попередньої обробки', value: ' τ = 3 год.'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Температура при попереднiй обробцi', value: 'Т = 120 °C'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Тиск при попереднiй обробцi', value: 'Р = 160-200 кПа'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Перемiшування при попереднiй обробцi', value: '1 - 10 об/хв'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Нейтралiзацiя лугу пiсля попередньої обробки', value: 'стiчною водою'}
+        );
+
+      }
+
+      this.totalResult.mainProc.push(
+              {param: 'Тиск при попереднiй обробцi', value: 'Р = 250-300 кПа'}
+      );
+      this.totalResult.mainProc.push(
+              {param: 'Тиск при попереднiй обробцi', value: 'Р = 250-300 кПа'}
+      );
+      this.totalResult.mainProc.push(
+              {param: '.Тиск при попереднiй обробцi', value: 'Р = 250-300 кПа'}
+      );
+
+
+
+      if (this.valueLignin === '0% - 10%' ||
+      this.valueLignin === '10% - 20%' ||
       this.value1 === 'солома пшеницi' ||
       this.value1 ===  'вiдходи рiпаку' ||
       this.value1 ===  'вiдходи соняшника' ||
@@ -290,6 +380,9 @@ export default {
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped lang="sass">
+
+  .main
+    width: 100%
 
   .main-content
     display: flex
@@ -396,31 +489,17 @@ export default {
     width: 90%
     margin: 20px auto
 
-  .footer
-    height: auto
-    padding: 0 10px
-    background-color: #42b983
-    margin-top: 60px
+  .result-item_title
     display: flex
-    flex-direction: column
+    margin-left: auto
+    margin-right: auto
+    width: 100%
+    border-bottom: 1px solid #b7c2ce
+    padding: 12px 2px
     h4
-      color: #fff
-    a
       font-weight: bold
-      color: white
-      text-decoration: none
-      padding: 10px 15px 10px 15px
-      margin: 0 15px 0 15px
-      &.router-link-exact-active
-        color: white
-      &:hover
-        border-bottom: 2px solid white
-        border-top: 2px solid white
-    .nav_menu
-      margin: 25px auto
-      display: flex
-      .nav-item
-        flex-direction: row
+
+
 
   .mainInputMultiselect::v-deep
     height: 30px
