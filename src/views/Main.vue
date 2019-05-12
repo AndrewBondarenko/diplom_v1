@@ -343,16 +343,22 @@ export default {
         );
       }
 
-      this.totalResult.mainProc.push(
-              {param: 'Тиск при попереднiй обробцi', value: 'Р = 250-300 кПа'}
-      );
-      this.totalResult.mainProc.push(
-              {param: 'Тиск при попереднiй обробцi', value: 'Р = 250-300 кПа'}
-      );
-      this.totalResult.mainProc.push(
-              {param: '.Тиск при попереднiй обробцi', value: 'Р = 250-300 кПа'}
-      );
 
+      this.totalResult.mainProc.push(
+              {param: 'Температура', value: 'Т = 35 °C'}
+      );
+      this.totalResult.mainProc.push(
+              {param: 'Концентрацiя сировини', value: '20 ÷ 30 г/дм3'}
+      );
+      this.totalResult.mainProc.push(
+              {param: 'Кислотнiть', value: 'рН = 7'}
+      );
+      this.totalResult.mainProc.push(
+              {param: 'Перемiшування', value: 'Перiодичне, 1 - 10 об/хв'}
+      );
+      this.totalResult.mainProc.push(
+              {param: 'Тривалiсть процесу', value: 'τ = 96 год.'}
+      );
 
 
       if (this.valueLignin === '0% - 10%' ||
