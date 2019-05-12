@@ -4,12 +4,17 @@
     <!--<div v-if="$root.currentUser ==''" class="main">-->
     <div class="main-content">
       <div class="main-content_title">
-        <h2>Вхiднi данi</h2>
+        <div class="main-content_title_text">
+          <h2>Вхiднi данi</h2>
+        </div>
+        <div class="main-content_title_text" v-if="validation === false">
+          <h3>Заповнiть всi поля</h3>
+        </div>
       </div>
-      <div class="main-content_input_data">
-        <div class="main-content-input">
+      <div class="main-content_input_data" >
+        <div class="main-content-input" >
           <h4>Сировина</h4>
-          <div class="main-content-input-multiselect">
+          <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue1}">
             <multiselect
                     class="mainInputMultiselect"
                     v-model="value1"
@@ -23,7 +28,7 @@
         </div>
         <div class="main-content-input">
           <h4>Вмiст лiгнiну</h4>
-          <div class="main-content-input-multiselect">
+          <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationLignin}">
             <multiselect
                     class="mainInputMultiselect"
                     v-model="valueLignin"
@@ -37,7 +42,7 @@
         </div>
         <div class="main-content-input">
           <h4>Вмiст целюлози</h4>
-          <div class="main-content-input-multiselect">
+          <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationCellulose}">
             <multiselect
                     class="mainInputMultiselect"
                     v-model="valueCellulose"
@@ -51,11 +56,13 @@
         </div>
         <div class="main-content-input">
           <h4>Кислотнiсть (pH)</h4>
-           <input type="number" placeholder="Кислотнiсть" class="main-content-input_field" />
+         <div class="main-content-input_field" :class="{invalidInputValidation: !validationPh}">
+           <input v-model="valuePh" type="number" placeholder="Кислотнiсть" />
+         </div>
         </div>
         <div class="main-content-input">
           <h4>Подрiбненiсть</h4>
-          <div class="main-content-input-multiselect">
+          <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue3}">
             <multiselect
                     class="mainInputMultiselect"
                     v-model="value3"
@@ -69,7 +76,7 @@
         </div>
         <div class="main-content-input" >
           <h4>Заповненiсть бiореактора</h4>
-          <div class="main-content-input-multiselect" >
+          <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue4}">
             <multiselect
                     class="mainInputMultiselect"
                     v-model="value4"
@@ -82,12 +89,14 @@
           </div>
         </div>
         <div class="main-content_input_data-calc">
-          <button @click="calcResult">Розрахувати</button>
+          <button @click="calcTotalResult">Розрахувати</button>
         </div>
       </div>
 
       <div class="main-content_title">
-        <h2>Результат</h2>
+        <div class="main-content_title_text">
+          <h2>Результат</h2>
+        </div>
       </div>
       <div class="main-content_result main-content_result_border_top ">
         <div class="main-content_result_empty"></div>
@@ -188,12 +197,20 @@ export default {
   },
   data(){
     return{
+      validation: true,
       value1: null,
       valueLignin: null,
       value3: null,
       value4: null,
+      valuePh: null,
       valueCellulose: null,
       selected: '',
+      validationValue1: true,
+      validationLignin: true,
+      validationValue3: true,
+      validationValue4: true,
+      validationPh: true,
+      validationCellulose: true,
       raw: ['солома пшеницi', 'солома ячменю', 'вiдходи кукурудзи', 'вiдходи рiпаку', 'вiдходи соняшника', 'деревина берези', 'деревина сосни'],
       lignin: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
       cellulose: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
@@ -229,6 +246,11 @@ export default {
     }
   },
   methods: {
+    calcTotalResult: function (e) {
+      if (this.checkForm() === true){
+        this.calcResult();
+      }
+    },
     calcResult: function(e) {
 
       this.allStages.stage1.length = 0;
@@ -269,8 +291,11 @@ export default {
         this.totalResult.preProc.push(
                 {param: 'Тиск при попереднiй обробцi', value: 'Р = 250-300 кПа'}
         )
-      }
-      else{
+      } else if ((this.valueLignin === '20% - 30%' || this.valueLignin === '30% - 40%' || this.valueLignin === '40% <') &&
+              (this.valueCellulose === '0% - 10%' || this.valueCellulose === '10% - 20%' || this.valueCellulose === '20% - 30%') &&
+              (this.value1 === 'солома пшеницi' || this.value1 === 'вiдходи рiпаку' || this.value1 === 'вiдходи соняшника' ||
+               this.value1 ===  'деревина берези' || this.value1 === 'деревина сосни')){
+
         this.totalResult.preProc.push(
                 {param: 'Метод попередньої обробки', value: 'луг (NaOH)'}
         );
@@ -293,6 +318,29 @@ export default {
                 {param: 'Нейтралiзацiя лугу пiсля попередньої обробки', value: 'стiчною водою'}
         );
 
+      }
+      else {
+        this.totalResult.preProc.push(
+                {param: 'Метод попередньої обробки', value: 'луг (NaOH)'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Концентрацiя лугу', value: ' 2 моль/дм3'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Тривалiсть попередньої обробки', value: ' τ = 3 год.'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Температура при попереднiй обробцi', value: 'Т = 120 °C'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Тиск при попереднiй обробцi', value: 'Р = 160-200 кПа'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Перемiшування при попереднiй обробцi', value: '1 - 10 об/хв'}
+        );
+        this.totalResult.preProc.push(
+                {param: 'Нейтралiзацiя лугу пiсля попередньої обробки', value: 'стiчною водою'}
+        );
       }
 
       this.totalResult.mainProc.push(
@@ -386,6 +434,37 @@ export default {
       stepCount = stepCount + 1;
 
 
+    },
+
+    checkForm: function (e) {
+
+      this.validationValue1 = this.value1 !== null;
+
+      this.validationLignin = this.valueLignin !== null;
+
+      this.validationValue3 = this.value3 !== null;
+
+      this.validationValue4 = this.value4 !== null;
+
+      this.validationCellulose = this.valueCellulose !== null;
+
+      this.validationPh = this.valuePh !== null;
+
+      this.validationPh = !(this.valuePh === "" || this.valuePh === null);
+
+      if (this.validationValue1 === false ||
+          this.validationLignin === false ||
+          this.validationValue3 === false ||
+          this.validationValue4 === false ||
+          this.validationPh === false ||
+          this.validationCellulose === false){
+        this.validation = false;
+        return false
+      }
+      else {
+        this.validation = true;
+        return true
+      }
     }
   }
 }
@@ -405,8 +484,20 @@ export default {
 
   .main-content_title
     width: 90%
-    margin: 0 auto
-    text-align: left
+    margin: 15px auto 0 auto
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    h2
+      margin: 0
+    h3
+      margin: 0
+      color: #ff5345
+    .main-content_title_text
+      height: auto
+      margin-top: auto
+      margin-bottom: 15px
+
 
   .main-content_input_data
     display: flex
@@ -434,11 +525,20 @@ export default {
       text-align: left
 
   .main-content-input_field
-    height: 36px
+    height: 40px
     width: 270px
     margin: 0 auto 10px auto
     box-sizing: border-box
-    padding-left: 5px
+    input
+      height: 30px
+      width: 261px
+      padding-left: 5px
+
+  .invalidInputValidation
+    height: 39px
+    border-bottom: 2px solid #ff5345
+    box-sizing: border-box
+
 
   .main-content_input_data-calc
     width: 270px
