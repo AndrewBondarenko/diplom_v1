@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="main-content-input">
-            <h4>Вмiст лiгнiну</h4>
+            <h4>Вмiст лiгнiну (%)</h4>
             <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationLignin}">
               <multiselect
                       class="mainInputMultiselect"
@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="main-content-input">
-            <h4>Вмiст целюлози</h4>
+            <h4>Вмiст целюлози (%)</h4>
             <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationCellulose}">
               <multiselect
                       class="mainInputMultiselect"
@@ -56,17 +56,29 @@
             </div>
           </div>
           <div class="main-content-input">
+            <h4>Вмiст мiнеральних солей (%)</h4>
+            <div class="main-content-input_field" :class="{invalidInputValidation: !validationSalts}">
+              <input v-model="valueSalts" type="number" placeholder="Вмiст мiнеральних солей" />
+            </div>
+          </div>
+          <div class="main-content-input">
             <h4>Кислотнiсть (pH)</h4>
            <div class="main-content-input_field" :class="{invalidInputValidation: !validationPh}">
              <input v-model="valuePh" type="number" placeholder="Кислотнiсть" />
            </div>
           </div>
           <div class="main-content-input">
-            <h4>Подрiбненiсть</h4>
-            <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue3}">
+            <h4>Вмiст сухої речовини (г/дм3)</h4>
+            <div class="main-content-input_field" :class="{invalidInputValidation: !validationDryMatter}">
+              <input v-model="valueDryMatter" type="number" placeholder="Вмiст сухої речовини" />
+            </div>
+          </div>
+          <div class="main-content-input">
+            <h4>Подрiбненiсть (мм)</h4>
+            <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationShredding}">
               <multiselect
                       class="mainInputMultiselect"
-                      v-model="value3"
+                      v-model="valueShredding"
                       :options="shredding"
                       :show-labels="false"
                       :close-on-select="true"
@@ -76,17 +88,9 @@
             </div>
           </div>
           <div class="main-content-input" >
-            <h4>Заповненiсть бiореактора</h4>
-            <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue4}">
-              <multiselect
-                      class="mainInputMultiselect"
-                      v-model="value4"
-                      :options="fulness"
-                      :show-labels="false"
-                      :close-on-select="true"
-                      :clear-on-select="false"
-                      placeholder="Заповненiсть">
-              </multiselect>
+            <h4>Об'єм заповненого реактора (м3)</h4>
+            <div class="main-content-input_field" :class="{invalidInputValidation: !validationFulness}">
+              <input v-model="valueFulness" type="number" placeholder="Об'єм заповненого біореактора" />
             </div>
           </div>
           <div class="main-content_input_data-calc">
@@ -127,7 +131,10 @@
           ></ResultItem>
 
         </div>
-
+        <div class="main-content-result_description main-content-input_empty" v-else-if = "calcStatus == false">
+          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
+          <h3>ПЕРЕВIРТЕ ВХIДНI ДАНI</h3>
+        </div>
         <div class="main-content-result_description main-content-input_empty" v-else>
           <h3>ФОРМА НЕ ЗАПОВНЕНА</h3>
         </div>
@@ -200,23 +207,28 @@ export default {
   data(){
     return{
       validation: true,
+      calcStatus: true,
       value1: null,
       valueLignin: null,
-      value3: null,
-      value4: null,
+      valueSalts: null,
+      valueDryMatter: null,
+      valueShredding: null,
+      valueFulness: null,
       valuePh: null,
       valueCellulose: null,
       selected: '',
       validationValue1: true,
       validationLignin: true,
-      validationValue3: true,
-      validationValue4: true,
+      validationSalts: true,
+      validationDryMatter: true,
+      validationShredding: true,
+      validationFulness: true,
       validationPh: true,
       validationCellulose: true,
       raw: ['солома пшеницi', 'солома ячменю', 'вiдходи кукурудзи', 'вiдходи рiпаку', 'вiдходи соняшника', 'деревина берези', 'деревина сосни'],
       lignin: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
       cellulose: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
-      shredding: ['мiлкоподрiбнена','середньоподрiбнена','крупноподрiбнена'],
+      shredding: ['мiлкоподрiбнена (1-3 мм)','середньоподрiбнена (3-100 мм)','крупноподрiбнена (100 мм <)'],
       fulness: ['> 30%','30% - 40%','40% - 50%','50% - 60%','60% - 70%','70% - 80%','80% - 90%','90% - 100%'],
       stages: [
         {id: 1, stageSet: 'stage1', stageName: 'Попередня підготовка сировини'},
@@ -267,9 +279,18 @@ export default {
       this.totalResult.preProc.length = 0;
       this.totalResult.mainProc.length = 0;
 
-      var stepCount = 0;
+      console.log(this.valuePh);
 
-      if (this.value3 !== 'мiлкоподрiбнена'){
+      var stepCount = 0;
+      var inoculum = this.valueFulness * 0.1667;
+
+      if (this.valueSalts > 20 ||
+          this.valuePh > 15){
+          this.calcStatus = false;
+          return false
+      }
+
+      if (this.valueShredding !== 'мiлкоподрiбнена (1-3 мм)'){
         this.totalResult.preProc.push(
                 {param: 'Подрібнення біоенергетичної сировини', value: 'dч = 1-3 мм'}
         )
@@ -291,8 +312,18 @@ export default {
                 {param: 'Температура при попереднiй обробцi', value: 'Т = 130-140 °C'}
         );
         this.totalResult.preProc.push(
-                {param: 'Тиск при попереднiй обробцi', value: 'Р = 250-300 кПа'}
-        )
+                {param: 'Тиск при попереднiй обробцi', value: 'Р = 250 кПа'}
+        );
+        if (this.valuePh < 5){
+
+          this.totalResult.preProc.push(
+                  {param: 'Кислотнiть при попереднiй обробцi', value: 'pH = 5'}
+          );
+          this.totalResult.preProc.push(
+                  {param: 'Стабiлiзацiя кислотностi', value: 'Оцтова кислота (CH3COOH)'}
+          );
+        }
+
       } else if ((this.valueLignin === '20% - 30%' || this.valueLignin === '30% - 40%' || this.valueLignin === '40% <') &&
               (this.valueCellulose === '0% - 10%' || this.valueCellulose === '10% - 20%' || this.valueCellulose === '20% - 30%') &&
               (this.value1 === 'солома пшеницi' || this.value1 === 'вiдходи рiпаку' || this.value1 === 'вiдходи соняшника' ||
@@ -311,10 +342,20 @@ export default {
                 {param: 'Температура при попереднiй обробцi', value: 'Т = 120 °C'}
         );
         this.totalResult.preProc.push(
-                {param: 'Тиск при попереднiй обробцi', value: 'Р = 160-200 кПа'}
+                {param: 'Тиск при попереднiй обробцi', value: 'Р = 180 кПа'}
         );
+
+        if (this.valuePh < 5){
+          this.totalResult.preProc.push(
+                  {param: 'Кислотнiть при попереднiй обробцi', value: 'pH = 5'}
+          );
+          this.totalResult.preProc.push(
+                  {param: 'Стабiлiзацiя кислотностi', value: 'Оцтова кислота (CH3COOH)'}
+          );
+        }
+
         this.totalResult.preProc.push(
-                {param: 'Перемiшування при попереднiй обробцi', value: '1 - 10 об/хв'}
+                {param: 'Перемiшування при попереднiй обробцi', value: 'постiйне, 1 - 10 об/хв'}
         );
         this.totalResult.preProc.push(
                 {param: 'Нейтралiзацiя лугу пiсля попередньої обробки', value: 'стiчною водою'}
@@ -335,10 +376,20 @@ export default {
                 {param: 'Температура при попереднiй обробцi', value: 'Т = 120 °C'}
         );
         this.totalResult.preProc.push(
-                {param: 'Тиск при попереднiй обробцi', value: 'Р = 160-200 кПа'}
+                {param: 'Тиск при попереднiй обробцi', value: 'Р = 180 кПа'}
         );
+
+        if (this.valuePh < 5){
+          this.totalResult.preProc.push(
+                  {param: 'Кислотнiть при попереднiй обробцi', value: 'pH = 5'}
+          );
+          this.totalResult.preProc.push(
+                  {param: 'Стабiлiзацiя кислотностi', value: 'Оцтова кислота (CH3COOH)'}
+          );
+        }
+
         this.totalResult.preProc.push(
-                {param: 'Перемiшування при попереднiй обробцi', value: '1 - 10 об/хв'}
+                {param: 'Перемiшування при попереднiй обробцi', value: '10 об/хв'}
         );
         this.totalResult.preProc.push(
                 {param: 'Нейтралiзацiя лугу пiсля попередньої обробки', value: 'стiчною водою'}
@@ -350,13 +401,25 @@ export default {
               {param: 'Температура', value: 'Т = 35 °C'}
       );
       this.totalResult.mainProc.push(
-              {param: 'Концентрацiя сировини', value: '20 ÷ 30 г/дм3'}
+              {param: 'Концентрацiя сировини', value: '30 г/дм3'}
+      );
+      this.totalResult.mainProc.push(
+              {param: 'Вмiст iнокуляту', value:inoculum }
       );
       this.totalResult.mainProc.push(
               {param: 'Кислотнiть', value: 'рН = 7'}
       );
       this.totalResult.mainProc.push(
-              {param: 'Перемiшування', value: 'Перiодичне, 1 - 10 об/хв'}
+              {param: 'Стабiлiзацiя кислотностi', value: 'Оцтова кислота (CH3COOH)'}
+      );
+      this.totalResult.mainProc.push(
+              {param: 'Перемiшування', value: 'Перiодичне, 10 об/хв'}
+      );
+      this.totalResult.mainProc.push(
+              {param: 'Перiод перемiшування', value: '5 год'}
+      );
+      this.totalResult.mainProc.push(
+              {param: 'Тривалiть перемiшування', value: '10 хв'}
       );
       this.totalResult.mainProc.push(
               {param: 'Тривалiсть процесу', value: 'τ = 96 год.'}
@@ -381,7 +444,7 @@ export default {
         });
         stepCount = stepCount + 1;
       }
-      if (this.value3 !== 'мiлкоподрiбнена'){
+      if (this.valueShredding !== 'мiлкоподрiбнена'){
         this.allStages.stage1.push({
           stepID: stepCount + 1, stepDesc: 'Подрібнення біоенергетичної сировини', stepParam: 'dч=1-3 мм'
         });
@@ -450,9 +513,13 @@ export default {
 
       this.validationLignin = this.valueLignin !== null;
 
-      this.validationValue3 = this.value3 !== null;
+      this.validationSalts = !(this.valueSalts === "" || this.valueSalts === null);
 
-      this.validationValue4 = this.value4 !== null;
+      this.validationDryMatter = !(this.valueDryMatter === "" || this.valueDryMatter === null);
+
+      this.validationShredding = this.valueShredding !== null;
+
+      this.validationFulness = !(this.valueFulness === "" || this.valueFulness === null);
 
       this.validationCellulose = this.valueCellulose !== null;
 
@@ -462,8 +529,10 @@ export default {
 
       if (this.validationValue1 === false ||
           this.validationLignin === false ||
-          this.validationValue3 === false ||
-          this.validationValue4 === false ||
+          this.validationShredding === false ||
+          this.validationSalts === false ||
+          this.validationDryMatter === false ||
+          this.validationFulness === false ||
           this.validationPh === false ||
           this.validationCellulose === false){
         this.validation = false;
@@ -521,13 +590,13 @@ export default {
 
   .main-content_input_data_content
     display: flex
-    width: 92%
+    width: 97.5%
     margin: 0 auto
     flex-direction: row
     flex-wrap: wrap
     justify-content: flex-start
     padding: 10px 15px
-    height: 230px
+    height: auto
 
   .main-content-input
     width: 270px
