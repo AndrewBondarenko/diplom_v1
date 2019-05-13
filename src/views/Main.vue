@@ -12,84 +12,86 @@
         </div>
       </div>
       <div class="main-content_input_data" >
-        <div class="main-content-input" >
-          <h4>Сировина</h4>
-          <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue1}">
-            <multiselect
-                    class="mainInputMultiselect"
-                    v-model="value1"
-                    :options="raw"
-                    :show-labels="false"
-                    :close-on-select="true"
-                    :clear-on-select="false"
-                    placeholder="Оберiть сировину">
-            </multiselect>
+        <div class="main-content_input_data_content">
+          <div class="main-content-input" >
+            <h4>Сировина</h4>
+            <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue1}">
+              <multiselect
+                      class="mainInputMultiselect"
+                      v-model="value1"
+                      :options="raw"
+                      :show-labels="false"
+                      :close-on-select="true"
+                      :clear-on-select="false"
+                      placeholder="Оберiть сировину">
+              </multiselect>
+            </div>
           </div>
-        </div>
-        <div class="main-content-input">
-          <h4>Вмiст лiгнiну</h4>
-          <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationLignin}">
-            <multiselect
-                    class="mainInputMultiselect"
-                    v-model="valueLignin"
-                    :options="lignin"
-                    :show-labels="false"
-                    :close-on-select="true"
-                    :clear-on-select="false"
-                    placeholder="Вмiст лiгнiну">
-            </multiselect>
+          <div class="main-content-input">
+            <h4>Вмiст лiгнiну</h4>
+            <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationLignin}">
+              <multiselect
+                      class="mainInputMultiselect"
+                      v-model="valueLignin"
+                      :options="lignin"
+                      :show-labels="false"
+                      :close-on-select="true"
+                      :clear-on-select="false"
+                      placeholder="Вмiст лiгнiну">
+              </multiselect>
+            </div>
           </div>
-        </div>
-        <div class="main-content-input">
-          <h4>Вмiст целюлози</h4>
-          <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationCellulose}">
-            <multiselect
-                    class="mainInputMultiselect"
-                    v-model="valueCellulose"
-                    :options="cellulose"
-                    :show-labels="false"
-                    :close-on-select="true"
-                    :clear-on-select="false"
-                    placeholder="Вмiст лiгнiну">
-            </multiselect>
+          <div class="main-content-input">
+            <h4>Вмiст целюлози</h4>
+            <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationCellulose}">
+              <multiselect
+                      class="mainInputMultiselect"
+                      v-model="valueCellulose"
+                      :options="cellulose"
+                      :show-labels="false"
+                      :close-on-select="true"
+                      :clear-on-select="false"
+                      placeholder="Вмiст лiгнiну">
+              </multiselect>
+            </div>
           </div>
-        </div>
-        <div class="main-content-input">
-          <h4>Кислотнiсть (pH)</h4>
-         <div class="main-content-input_field" :class="{invalidInputValidation: !validationPh}">
-           <input v-model="valuePh" type="number" placeholder="Кислотнiсть" />
-         </div>
-        </div>
-        <div class="main-content-input">
-          <h4>Подрiбненiсть</h4>
-          <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue3}">
-            <multiselect
-                    class="mainInputMultiselect"
-                    v-model="value3"
-                    :options="shredding"
-                    :show-labels="false"
-                    :close-on-select="true"
-                    :clear-on-select="false"
-                    placeholder="Подрiбненiсть">
-            </multiselect>
+          <div class="main-content-input">
+            <h4>Кислотнiсть (pH)</h4>
+           <div class="main-content-input_field" :class="{invalidInputValidation: !validationPh}">
+             <input v-model="valuePh" type="number" placeholder="Кислотнiсть" />
+           </div>
           </div>
-        </div>
-        <div class="main-content-input" >
-          <h4>Заповненiсть бiореактора</h4>
-          <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue4}">
-            <multiselect
-                    class="mainInputMultiselect"
-                    v-model="value4"
-                    :options="fulness"
-                    :show-labels="false"
-                    :close-on-select="true"
-                    :clear-on-select="false"
-                    placeholder="Заповненiсть">
-            </multiselect>
+          <div class="main-content-input">
+            <h4>Подрiбненiсть</h4>
+            <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue3}">
+              <multiselect
+                      class="mainInputMultiselect"
+                      v-model="value3"
+                      :options="shredding"
+                      :show-labels="false"
+                      :close-on-select="true"
+                      :clear-on-select="false"
+                      placeholder="Подрiбненiсть">
+              </multiselect>
+            </div>
           </div>
-        </div>
-        <div class="main-content_input_data-calc">
-          <button @click="calcTotalResult">Розрахувати</button>
+          <div class="main-content-input" >
+            <h4>Заповненiсть бiореактора</h4>
+            <div class="main-content-input-multiselect" :class="{invalidInputValidation: !validationValue4}">
+              <multiselect
+                      class="mainInputMultiselect"
+                      v-model="value4"
+                      :options="fulness"
+                      :show-labels="false"
+                      :close-on-select="true"
+                      :clear-on-select="false"
+                      placeholder="Заповненiсть">
+              </multiselect>
+            </div>
+          </div>
+          <div class="main-content_input_data-calc">
+            <button @click="calcTotalResult">Розрахувати</button>
+          </div>
         </div>
       </div>
 
@@ -511,15 +513,22 @@ export default {
     box-sizing: border-box
     margin: 0 auto 15px auto
     border: 1px solid #262626
-    flex-direction: row
-    flex-wrap: wrap
-    justify-content: flex-start
-    padding: 10px
-    height: 230px
+
     /*background: url("../assets/images/bioreactor.jpg") no-repeat*/
     /*background-position-x: right*/
     /*background-position-y: bottom*/
     /*background-origin: content-box*/
+
+  .main-content_input_data_content
+    display: flex
+    width: 92%
+    margin: 0 auto
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: flex-start
+    padding: 10px 15px
+    height: 230px
+
   .main-content-input
     width: 270px
     height: auto
@@ -541,7 +550,7 @@ export default {
       padding-left: 5px
 
   .invalidInputValidation
-    height: 39px
+    height: 40px
     border-bottom: 2px solid #ff5345
     box-sizing: border-box
 

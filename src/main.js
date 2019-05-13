@@ -20,4 +20,4 @@ new Vue({
     this.$root.currentUser = document.cookie.split('=')[1];
   },
   render: function (h) { return h(App) }
-}).$mount('#app')
+}).$mount('#app');
