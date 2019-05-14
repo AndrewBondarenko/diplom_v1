@@ -146,12 +146,9 @@
       <div class="main-content_result">
         <div class="main-content-result_description">
           <div class="main-content-result_graphic_set">
-            <div class="main-content-result_graphic">
-              <img src="../assets/images/graphic.jpg" alt="Graphic">
-            </div>
-            <div class="main-content-result_graphic">
-              <img src="../assets/images/graphic.jpg" alt="Graphic">
-            </div>
+
+            <Graph></Graph>
+
           </div>
         </div>
       </div>
@@ -187,23 +184,29 @@
   </div>
 </template>
 
+
 <script>
 // @ is an alias to /src
 import Multiselect from 'vue-multiselect';
 import Steps from '../components/Step';
 import Stages from '../components/Stage';
 import Login from '../views/Login';
-import ResultItem from '../components/ResultItem'
+import ResultItem from '../components/ResultItem';
+import Graph from '../components/Graph'
+
 
 export default {
+
   name: 'main',
   components: {
     Multiselect,
+    Graph,
     Steps,
     Stages,
     Login,
     ResultItem
   },
+
   data(){
     return{
       validation: true,
@@ -258,7 +261,9 @@ export default {
       totalResult: {
         preProc: [],
         mainProc: [],
-      }
+      },
+
+
     }
   },
   methods: {
@@ -612,6 +617,7 @@ export default {
   }
 }
 </script>
+
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped lang="sass">
 
@@ -725,19 +731,10 @@ export default {
   .main-content-result_graphic_set
     display: flex
     width: 100%
-    flex-direction: row
+    flex-direction: column
     padding-top: 20px
 
-  .main-content-result_graphic
-    display: flex
-    padding: 15px
-    margin-left: auto
-    margin-right: auto
-    height: 350px
-    width: 500px
-    img
-      height: 350px
-      width: 500px
+
 
   .main-content_result_title
     display: flex
