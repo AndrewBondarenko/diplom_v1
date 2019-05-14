@@ -131,7 +131,7 @@
           ></ResultItem>
 
         </div>
-        <div class="main-content-result_description main-content-input_empty" v-else-if = "calcStatus == false">
+        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
           <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
           <h3>ПЕРЕВIРТЕ ВХIДНI ДАНI</h3>
         </div>
@@ -207,7 +207,9 @@ export default {
   data(){
     return{
       validation: true,
+      validationType: "",
       calcStatus: true,
+      statusCalcResultFirstPart: true,
       value1: null,
       valueLignin: null,
       valueSalts: null,
@@ -228,7 +230,7 @@ export default {
       raw: ['солома пшеницi', 'солома ячменю', 'вiдходи кукурудзи', 'вiдходи рiпаку', 'вiдходи соняшника', 'деревина берези', 'деревина сосни'],
       lignin: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
       cellulose: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
-      shredding: ['мiлкоподрiбнена (1-3 мм)','середньоподрiбнена (3-100 мм)','крупноподрiбнена (100 мм <)'],
+      shredding: ['1-3 мм','3-100 мм','100 мм <'],
       fulness: ['> 30%','30% - 40%','40% - 50%','50% - 60%','60% - 70%','70% - 80%','80% - 90%','90% - 100%'],
       stages: [
         {id: 1, stageSet: 'stage1', stageName: 'Попередня підготовка сировини'},
@@ -260,48 +262,77 @@ export default {
     }
   },
   methods: {
+
     calcTotalResult: function (e) {
       if (this.checkForm() === true){
+        this.calcResultFirstPart();
         this.calcResult();
       }
     },
-    calcResult: function(e) {
 
-      this.allStages.stage1.length = 0;
-      this.allStages.stage2.length = 0;
-      this.allStages.stage3.length = 0;
-      this.allStages.stage4.length = 0;
-      this.allStages.stage5.length = 0;
-      this.allStages.stage6.length = 0;
-      this.allStages.stage7.length = 0;
-      this.allStages.stage8.length = 0;
-      this.allStages.stage9.length = 0;
+    checkForm: function (e) {
+
+      this.validationValue1 = this.value1 !== null;
+
+      this.validationLignin = this.valueLignin !== null;
+
+      this.validationSalts = !(this.valueSalts === "" || this.valueSalts === null);
+
+      this.validationDryMatter = !(this.valueDryMatter === "" || this.valueDryMatter === null);
+
+      this.validationShredding = this.valueShredding !== null;
+
+      this.validationFulness = !(this.valueFulness === "" || this.valueFulness === null);
+
+      this.validationCellulose = this.valueCellulose !== null;
+
+      this.validationPh = this.valuePh !== null;
+
+      this.validationPh = !(this.valuePh === "" || this.valuePh === null);
+
+      if (this.validationValue1 === false ||
+              this.validationLignin === false ||
+              this.validationShredding === false ||
+              this.validationSalts === false ||
+              this.validationDryMatter === false ||
+              this.validationFulness === false ||
+              this.validationPh === false ||
+              this.validationCellulose === false){
+        this.validation = false;
+        return false
+      }
+      else {
+        this.validation = true;
+        return true
+      }
+    },
+
+    calcResultFirstPart: function(e){
+
       this.totalResult.preProc.length = 0;
       this.totalResult.mainProc.length = 0;
+      this.validationType = '';
+      this.statusCalcResultFirstPart = true;
 
-      console.log(this.valuePh);
-
-      var stepCount = 0;
       var inoculum = this.valueFulness * 0.1667;
 
-      if (this.valueSalts > 20 ||
-          this.valuePh > 15){
-          this.calcStatus = false;
-          return false
+      if (this.valueSalts > 15 || this.valuePh > 15){
+        this.statusCalcResultFirstPart = false;
+        this.validationType = "case1";
+        return false
       }
 
-      if (this.valueShredding !== 'мiлкоподрiбнена (1-3 мм)'){
+      if (this.valueShredding !== '1-3 мм'){
         this.totalResult.preProc.push(
                 {param: 'Подрібнення біоенергетичної сировини', value: 'dч = 1-3 мм'}
         )
       }
 
       if ( ((this.valueLignin === '0% - 10%' && this.valueCellulose === '30% - 40%') ||
-           (this.valueLignin === '10% - 20%' && this.valueCellulose === '30% - 40%') ||
-           (this.valueLignin === '0% - 10%' && this.valueCellulose === '40% <') ||
-           (this.valueLignin === '10% - 20%' && this.valueCellulose === '40% <')) &&
-           (this.value1 ==='солома ячменю' || this.value1 === 'вiдходи кукурудзи')
-        ){
+              (this.valueLignin === '10% - 20%' && this.valueCellulose === '30% - 40%') ||
+              (this.valueLignin === '0% - 10%' && this.valueCellulose === '40% <') ||
+              (this.valueLignin === '10% - 20%' && this.valueCellulose === '40% <')) &&
+              (this.value1 ==='солома ячменю' || this.value1 === 'вiдходи кукурудзи')){
         this.totalResult.preProc.push(
                 {param: 'Метод попередньої обробки', value: 'пар'}
         );
@@ -314,6 +345,7 @@ export default {
         this.totalResult.preProc.push(
                 {param: 'Тиск при попереднiй обробцi', value: 'Р = 250 кПа'}
         );
+
         if (this.valuePh < 5){
 
           this.totalResult.preProc.push(
@@ -324,10 +356,16 @@ export default {
           );
         }
 
+        if (this.valueSalts < 5){
+          this.totalResult.preProc.push(
+                  {param: 'Додавання мiнеральних солей', value: 7 - this.valueSalts + ' %' }
+          );
+        }
+
       } else if ((this.valueLignin === '20% - 30%' || this.valueLignin === '30% - 40%' || this.valueLignin === '40% <') &&
               (this.valueCellulose === '0% - 10%' || this.valueCellulose === '10% - 20%' || this.valueCellulose === '20% - 30%') &&
               (this.value1 === 'солома пшеницi' || this.value1 === 'вiдходи рiпаку' || this.value1 === 'вiдходи соняшника' ||
-               this.value1 ===  'деревина берези' || this.value1 === 'деревина сосни')){
+                      this.value1 ===  'деревина берези' || this.value1 === 'деревина сосни')){
 
         this.totalResult.preProc.push(
                 {param: 'Метод попередньої обробки', value: 'луг (NaOH)'}
@@ -351,6 +389,12 @@ export default {
           );
           this.totalResult.preProc.push(
                   {param: 'Стабiлiзацiя кислотностi', value: 'Оцтова кислота (CH3COOH)'}
+          );
+        }
+
+        if (this.valueSalts < 5){
+          this.totalResult.preProc.push(
+                  {param: 'Додавання мiнеральних солей', value: 7 - this.valueSalts + ' %'}
           );
         }
 
@@ -363,37 +407,47 @@ export default {
 
       }
       else {
-        this.totalResult.preProc.push(
-                {param: 'Метод попередньої обробки', value: 'луг (NaOH)'}
-        );
-        this.totalResult.preProc.push(
-                {param: 'Концентрацiя лугу', value: ' 2 моль/дм3'}
-        );
-        this.totalResult.preProc.push(
-                {param: 'Тривалiсть попередньої обробки', value: ' τ = 3 год.'}
-        );
-        this.totalResult.preProc.push(
-                {param: 'Температура при попереднiй обробцi', value: 'Т = 120 °C'}
-        );
-        this.totalResult.preProc.push(
-                {param: 'Тиск при попереднiй обробцi', value: 'Р = 180 кПа'}
-        );
+        this.statusCalcResultFirstPart = false;
+        this.validationType = "case1";
+        return false
 
-        if (this.valuePh < 5){
-          this.totalResult.preProc.push(
-                  {param: 'Кислотнiть при попереднiй обробцi', value: 'pH = 5'}
-          );
-          this.totalResult.preProc.push(
-                  {param: 'Стабiлiзацiя кислотностi', value: 'Оцтова кислота (CH3COOH)'}
-          );
-        }
-
-        this.totalResult.preProc.push(
-                {param: 'Перемiшування при попереднiй обробцi', value: '10 об/хв'}
-        );
-        this.totalResult.preProc.push(
-                {param: 'Нейтралiзацiя лугу пiсля попередньої обробки', value: 'стiчною водою'}
-        );
+      //   this.totalResult.preProc.push(
+      //           {param: 'Метод попередньої обробки', value: 'луг (NaOH)'}
+      //   );
+      //   this.totalResult.preProc.push(
+      //           {param: 'Концентрацiя лугу', value: ' 2 моль/дм3'}
+      //   );
+      //   this.totalResult.preProc.push(
+      //           {param: 'Тривалiсть попередньої обробки', value: ' τ = 3 год.'}
+      //   );
+      //   this.totalResult.preProc.push(
+      //           {param: 'Температура при попереднiй обробцi', value: 'Т = 120 °C'}
+      //   );
+      //   this.totalResult.preProc.push(
+      //           {param: 'Тиск при попереднiй обробцi', value: 'Р = 180 кПа'}
+      //   );
+      //
+      //   if (this.valuePh < 5){
+      //     this.totalResult.preProc.push(
+      //             {param: 'Кислотнiть при попереднiй обробцi', value: 'pH = 5'}
+      //     );
+      //     this.totalResult.preProc.push(
+      //             {param: 'Стабiлiзацiя кислотностi', value: 'Оцтова кислота (CH3COOH)'}
+      //     );
+      //   }
+      //
+      //   if (this.valueSalts < 5){
+      //     this.totalResult.preProc.push(
+      //             {param: 'Додавання мiнеральних солей', value: 7 - this.valueSalts + ' %'}
+      //     );
+      //   }
+      //
+      //   this.totalResult.preProc.push(
+      //           {param: 'Перемiшування при попереднiй обробцi', value: '10 об/хв'}
+      //   );
+      //   this.totalResult.preProc.push(
+      //           {param: 'Нейтралiзацiя лугу пiсля попередньої обробки', value: 'стiчною водою'}
+      //   );
       }
 
 
@@ -421,9 +475,57 @@ export default {
       this.totalResult.mainProc.push(
               {param: 'Тривалiть перемiшування', value: '10 хв'}
       );
-      this.totalResult.mainProc.push(
-              {param: 'Тривалiсть процесу', value: 'τ = 96 год.'}
-      );
+
+      if (this.valueDryMatter < 20){
+        this.totalResult.mainProc.push(
+                {param: 'Тривалiсть процесу', value: 'τ = 264 год.'}
+        );
+      }
+      if (this.valueDryMatter >= 20 && this.valueDryMatter < 29){
+        this.totalResult.mainProc.push(
+                {param: 'Тривалiсть процесу', value: 'τ = 240 год.'}
+        );
+      }
+      if (this.valueDryMatter >= 29 && this.valueDryMatter < 39){
+        this.totalResult.mainProc.push(
+                {param: 'Тривалiсть процесу', value: 'τ = 216 год.'}
+        );
+      }
+      if (this.valueDryMatter >= 39 && this.valueDryMatter < 49){
+        this.totalResult.mainProc.push(
+                {param: 'Тривалiсть процесу', value: 'τ = 192 год.'}
+        );
+      }
+      if (this.valueDryMatter >= 49 && this.valueDryMatter < 59){
+        this.totalResult.mainProc.push(
+                {param: 'Тривалiсть процесу', value: 'τ = 168 год.'}
+        );
+      }
+      if (this.valueDryMatter >= 59 && this.valueDryMatter < 69){
+        this.totalResult.mainProc.push(
+                {param: 'Тривалiсть процесу', value: 'τ = 144 год.'}
+        );
+      }
+      if (this.valueDryMatter >= 69){
+        this.totalResult.mainProc.push(
+                {param: 'Тривалiсть процесу', value: 'τ = 120 год.'}
+        );
+      }
+    },
+
+    calcResult: function(e) {
+
+      this.allStages.stage1.length = 0;
+      this.allStages.stage2.length = 0;
+      this.allStages.stage3.length = 0;
+      this.allStages.stage4.length = 0;
+      this.allStages.stage5.length = 0;
+      this.allStages.stage6.length = 0;
+      this.allStages.stage7.length = 0;
+      this.allStages.stage8.length = 0;
+      this.allStages.stage9.length = 0;
+
+      var stepCount = 0;
 
 
       if (this.valueLignin === '0% - 10%' ||
@@ -444,7 +546,7 @@ export default {
         });
         stepCount = stepCount + 1;
       }
-      if (this.valueShredding !== 'мiлкоподрiбнена'){
+      if (this.valueShredding !== '1-3 мм'){
         this.allStages.stage1.push({
           stepID: stepCount + 1, stepDesc: 'Подрібнення біоенергетичної сировини', stepParam: 'dч=1-3 мм'
         });
@@ -507,42 +609,6 @@ export default {
 
     },
 
-    checkForm: function (e) {
-
-      this.validationValue1 = this.value1 !== null;
-
-      this.validationLignin = this.valueLignin !== null;
-
-      this.validationSalts = !(this.valueSalts === "" || this.valueSalts === null);
-
-      this.validationDryMatter = !(this.valueDryMatter === "" || this.valueDryMatter === null);
-
-      this.validationShredding = this.valueShredding !== null;
-
-      this.validationFulness = !(this.valueFulness === "" || this.valueFulness === null);
-
-      this.validationCellulose = this.valueCellulose !== null;
-
-      this.validationPh = this.valuePh !== null;
-
-      this.validationPh = !(this.valuePh === "" || this.valuePh === null);
-
-      if (this.validationValue1 === false ||
-          this.validationLignin === false ||
-          this.validationShredding === false ||
-          this.validationSalts === false ||
-          this.validationDryMatter === false ||
-          this.validationFulness === false ||
-          this.validationPh === false ||
-          this.validationCellulose === false){
-        this.validation = false;
-        return false
-      }
-      else {
-        this.validation = true;
-        return true
-      }
-    }
   }
 }
 </script>
