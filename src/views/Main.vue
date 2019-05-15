@@ -145,13 +145,12 @@
       </div>
       <div class="main-content_result">
         <div class="main-content-result_description">
-          <div class="main-content-result_graphic_set">
-            <div class="main-content-result_graphic">
-              <img src="../assets/images/graphic.jpg" alt="Graphic">
-            </div>
-            <div class="main-content-result_graphic">
-              <img src="../assets/images/graphic.jpg" alt="Graphic">
-            </div>
+          <div class="main-content-result_graphic_set "  v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
+
+            <Graph
+                   :labels="totalResult.labelsForChart">
+            </Graph>
+
           </div>
         </div>
       </div>
@@ -175,11 +174,6 @@
 
       </div>
     </div>
-    <!--<div class="footer">-->
-      <!--<div class="footer_year">-->
-        <!--<h4>Kyiv 2019</h4>-->
-      <!--</div>-->
-    <!--</div>-->
   </div>
   <div v-else>
        <Login></Login>
@@ -187,23 +181,28 @@
   </div>
 </template>
 
+
 <script>
 // @ is an alias to /src
 import Multiselect from 'vue-multiselect';
 import Steps from '../components/Step';
 import Stages from '../components/Stage';
 import Login from '../views/Login';
-import ResultItem from '../components/ResultItem'
+import ResultItem from '../components/ResultItem';
+import Graph from '../components/Graph'
+
 
 export default {
   name: 'main',
   components: {
     Multiselect,
+    Graph,
     Steps,
     Stages,
     Login,
     ResultItem
   },
+
   data(){
     return{
       validation: true,
@@ -213,7 +212,7 @@ export default {
       value1: null,
       valueLignin: null,
       valueSalts: null,
-      valueDryMatter: null,
+      valueDryMatter: '',
       valueShredding: null,
       valueFulness: null,
       valuePh: null,
@@ -227,6 +226,7 @@ export default {
       validationFulness: true,
       validationPh: true,
       validationCellulose: true,
+      processDuration: 0,
       raw: ['солома пшеницi', 'солома ячменю', 'вiдходи кукурудзи', 'вiдходи рiпаку', 'вiдходи соняшника', 'деревина берези', 'деревина сосни'],
       lignin: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
       cellulose: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
@@ -258,6 +258,33 @@ export default {
       totalResult: {
         preProc: [],
         mainProc: [],
+        labelsForChart: ''
+      },
+
+    }
+  },
+  watch: {
+    valueDryMatter: function(val){
+      if (val < 20){
+        this.totalResult.labelsForChart = 144
+      }
+      if (val >= 20 && val < 29){
+        this.totalResult.labelsForChart = 168
+      }
+      if (val>= 29 && val < 39){
+        this.totalResult.labelsForChart = 168
+      }
+      if (val >= 39 && val < 49){
+        this.totalResult.labelsForChart = 168
+      }
+      if (val >= 49 && val < 59){
+        this.totalResult.labelsForChart = 168
+      }
+      if (val >= 59 && val < 69){
+        this.totalResult.labelsForChart = 168
+      }
+      if (val >= 69){
+        this.totalResult.labelsForChart = 168
       }
     }
   },
@@ -458,7 +485,7 @@ export default {
               {param: 'Концентрацiя сировини', value: '30 г/дм3'}
       );
       this.totalResult.mainProc.push(
-              {param: 'Вмiст iнокуляту', value:inoculum }
+              {param: 'Вмiст iнокуляту', value: inoculum.toString()  }
       );
       this.totalResult.mainProc.push(
               {param: 'Кислотнiть', value: 'рН = 7'}
@@ -477,36 +504,44 @@ export default {
       );
 
       if (this.valueDryMatter < 20){
+
         this.totalResult.mainProc.push(
                 {param: 'Тривалiсть процесу', value: 'τ = 264 год.'}
         );
       }
       if (this.valueDryMatter >= 20 && this.valueDryMatter < 29){
+
         this.totalResult.mainProc.push(
                 {param: 'Тривалiсть процесу', value: 'τ = 240 год.'}
         );
       }
       if (this.valueDryMatter >= 29 && this.valueDryMatter < 39){
+
         this.totalResult.mainProc.push(
                 {param: 'Тривалiсть процесу', value: 'τ = 216 год.'}
         );
+
       }
       if (this.valueDryMatter >= 39 && this.valueDryMatter < 49){
+
         this.totalResult.mainProc.push(
                 {param: 'Тривалiсть процесу', value: 'τ = 192 год.'}
         );
       }
       if (this.valueDryMatter >= 49 && this.valueDryMatter < 59){
+
         this.totalResult.mainProc.push(
                 {param: 'Тривалiсть процесу', value: 'τ = 168 год.'}
         );
       }
       if (this.valueDryMatter >= 59 && this.valueDryMatter < 69){
+
         this.totalResult.mainProc.push(
                 {param: 'Тривалiсть процесу', value: 'τ = 144 год.'}
         );
       }
       if (this.valueDryMatter >= 69){
+
         this.totalResult.mainProc.push(
                 {param: 'Тривалiсть процесу', value: 'τ = 120 год.'}
         );
@@ -612,6 +647,7 @@ export default {
   }
 }
 </script>
+
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped lang="sass">
 
@@ -725,19 +761,10 @@ export default {
   .main-content-result_graphic_set
     display: flex
     width: 100%
-    flex-direction: row
+    flex-direction: column
     padding-top: 20px
 
-  .main-content-result_graphic
-    display: flex
-    padding: 15px
-    margin-left: auto
-    margin-right: auto
-    height: 350px
-    width: 500px
-    img
-      height: 350px
-      width: 500px
+
 
   .main-content_result_title
     display: flex

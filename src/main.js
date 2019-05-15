@@ -3,9 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios'
-
+import Chartist from 'chartist-vuejs'
+import VueChartist from 'v-chartist'
+Vue.use(Chartist)
+Vue.use(require('vue-chartist'))
 Vue.config.productionTip = false
-
+Vue.use(VueChartist)
 new Vue({
   router,
   store,
