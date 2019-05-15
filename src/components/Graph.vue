@@ -35,7 +35,7 @@
             console.log(this.labels);
             let array = [];
             for (var i = 1; i <= this.labels / 24; i++ ){
-                array.push(i)
+                array.push("доба " + i)
             };
             console.log(array);
             var ctx = document.getElementById('myChart').getContext('2d');
@@ -52,7 +52,7 @@
                             borderWidth: 4,
                             pointBorderColor: '#FC2525',
                             backgroundColor: ['rgba(255, 255, 204, 0.5)'],
-                            data: [40, 39, 10, 40, 39, 80, 40]
+                            data: [39, 39.58, 39.2, 39.3, 38.3, 33.8, 23.2]
                         },{
                             label: 'Без попередньоi обробки',
                             borderColor: '#05CBE1',
@@ -60,7 +60,7 @@
                             pointBorderColor: '#05CBE1',
                             borderWidth: 4,
                             backgroundColor:['rgba(71, 183,132,.3)'],
-                            data: [60, 55, 32, 10, 2, 12, 53]
+                            data: [27.3, 27.2, 27.4, 27.0, 26.0, 22.6, 14.2]
                         }
                     ]
                 },

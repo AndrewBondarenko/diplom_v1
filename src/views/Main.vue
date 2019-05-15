@@ -58,19 +58,19 @@
           <div class="main-content-input">
             <h4>Вмiст мiнеральних солей (%)</h4>
             <div class="main-content-input_field" :class="{invalidInputValidation: !validationSalts}">
-              <input v-model="valueSalts" type="number" placeholder="Вмiст мiнеральних солей" />
+              <input v-model="valueSalts" type="number" placeholder="Вмiст мiнеральних солей" min="0" />
             </div>
           </div>
           <div class="main-content-input">
             <h4>Кислотнiсть (pH)</h4>
            <div class="main-content-input_field" :class="{invalidInputValidation: !validationPh}">
-             <input v-model="valuePh" type="number" placeholder="Кислотнiсть" />
+             <input v-model="valuePh" type="number" placeholder="Кислотнiсть"  min="0"/>
            </div>
           </div>
           <div class="main-content-input">
             <h4>Вмiст сухої речовини (г/дм3)</h4>
             <div class="main-content-input_field" :class="{invalidInputValidation: !validationDryMatter}">
-              <input v-model="valueDryMatter" type="number" placeholder="Вмiст сухої речовини" />
+              <input v-model="valueDryMatter" type="number" placeholder="Вмiст сухої речовини" min="0"/>
             </div>
           </div>
           <div class="main-content-input">
@@ -90,7 +90,7 @@
           <div class="main-content-input" >
             <h4>Об'єм заповненого реактора (м3)</h4>
             <div class="main-content-input_field" :class="{invalidInputValidation: !validationFulness}">
-              <input v-model="valueFulness" type="number" placeholder="Об'єм заповненого біореактора" />
+              <input v-model="valueFulness" type="number" placeholder="Об'єм заповненого біореактора" min="0" />
             </div>
           </div>
           <div class="main-content_input_data-calc">
@@ -401,7 +401,7 @@ export default {
                 {param: 'Концентрацiя лугу', value: ' 2 моль/дм3'}
         );
         this.totalResult.preProc.push(
-                {param: 'Тривалiсть попередньої обробки', value: ' τ = 3 год.'}
+                {param: 'Тривалiсть попередньої обробки', value: ' τ = 2 год.'}
         );
         this.totalResult.preProc.push(
                 {param: 'Температура при попереднiй обробцi', value: 'Т = 120 °C'}
