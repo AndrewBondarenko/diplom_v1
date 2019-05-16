@@ -23,6 +23,7 @@
                       :show-labels="false"
                       :close-on-select="true"
                       :clear-on-select="false"
+                      @input="check=false"
                       placeholder="Оберiть сировину">
               </multiselect>
             </div>
@@ -70,7 +71,7 @@
           <div class="main-content-input">
             <h4>Вмiст сухої речовини (г/дм3)</h4>
             <div class="main-content-input_field" :class="{invalidInputValidation: !validationDryMatter}">
-              <input v-model="valueDryMatter" type="number" placeholder="Вмiст сухої речовини" min="0"/>
+              <input v-model="valueDryMatter" @change="check = false" type="number" placeholder="Вмiст сухої речовини" min="0"/>
             </div>
           </div>
           <div class="main-content-input">
@@ -147,8 +148,9 @@
         <div class="main-content-result_description">
           <div class="main-content-result_graphic_set "  v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
 
-            <Graph
-                   :labels="totalResult.labelsForChart">
+            <Graph v-if="check"
+                   :labels="totalResult.labelsForChart"
+                   :raw="value1">
             </Graph>
 
           </div>
@@ -205,6 +207,7 @@ export default {
 
   data(){
     return{
+      check: false,
       validation: true,
       validationType: "",
       calcStatus: true,
@@ -266,31 +269,33 @@ export default {
   watch: {
     valueDryMatter: function(val){
       if (val < 20){
-        this.totalResult.labelsForChart = 144
+        this.totalResult.labelsForChart = 264
       }
       if (val >= 20 && val < 29){
-        this.totalResult.labelsForChart = 168
+        this.totalResult.labelsForChart = 240
       }
       if (val>= 29 && val < 39){
-        this.totalResult.labelsForChart = 168
+        this.totalResult.labelsForChart = 216
       }
       if (val >= 39 && val < 49){
-        this.totalResult.labelsForChart = 168
+        this.totalResult.labelsForChart = 192
       }
       if (val >= 49 && val < 59){
         this.totalResult.labelsForChart = 168
       }
       if (val >= 59 && val < 69){
-        this.totalResult.labelsForChart = 168
+        this.totalResult.labelsForChart = 144
       }
       if (val >= 69){
-        this.totalResult.labelsForChart = 168
+        this.totalResult.labelsForChart = 120
       }
     }
   },
   methods: {
 
     calcTotalResult: function (e) {
+      this.check = false;
+      this.check = true;
       if (this.checkForm() === true){
         this.calcResultFirstPart();
         this.calcResult();
