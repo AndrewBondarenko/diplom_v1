@@ -145,8 +145,8 @@
         <h3>Графiки</h3>
       </div>
       <div class="main-content_result">
-        <div class="main-content-result_description">
-          <div class="main-content-result_graphic_set "  v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
+        <div class="main-content-result_description" v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
+          <div class="main-content-result_graphic_set " >
 
             <Graph v-if="check"
                    :labels="totalResult.labelsForChart"
@@ -155,6 +155,16 @@
 
           </div>
         </div>
+
+        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
+          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
+          <h3>ПЕРЕВIРТЕ ВХIДНI ДАНI</h3>
+        </div>
+
+        <div class="main-content-result_description main-content-input_empty" v-else>
+          <h3>ФОРМА НЕ ЗАПОВНЕНА</h3>
+        </div>
+
       </div>
       <div class="main-content_result_title">
         <h3>Основнi етапи процесу видобутку водню</h3>
@@ -168,6 +178,11 @@
                   v-bind:stageSet="stage.stageSet"
                   v-bind:allStages="allStages"
           ></Stages>
+        </div>
+
+        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
+          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
+          <h3>ПЕРЕВIРТЕ ВХIДНI ДАНI</h3>
         </div>
 
         <div class="main-content-result_description main-content-input_empty" v-else>
@@ -308,19 +323,17 @@ export default {
 
       this.validationLignin = this.valueLignin !== null;
 
-      this.validationSalts = !(this.valueSalts === "" || this.valueSalts === null);
+      this.validationSalts = !(this.valueSalts === "" || this.valueSalts === null || this.valueSalts < 0);
 
-      this.validationDryMatter = !(this.valueDryMatter === "" || this.valueDryMatter === null);
+      this.validationDryMatter = !(this.valueDryMatter === "" || this.valueDryMatter === null || this.valueDryMatter < 0);
 
       this.validationShredding = this.valueShredding !== null;
 
-      this.validationFulness = !(this.valueFulness === "" || this.valueFulness === null);
+      this.validationFulness = !(this.valueFulness === "" || this.valueFulness === null || this.valueFulness < 0);
 
       this.validationCellulose = this.valueCellulose !== null;
 
-      this.validationPh = this.valuePh !== null;
-
-      this.validationPh = !(this.valuePh === "" || this.valuePh === null);
+      this.validationPh = !(this.valuePh === "" || this.valuePh === null || this.valuePh < 0);
 
       if (this.validationValue1 === false ||
               this.validationLignin === false ||
@@ -365,6 +378,7 @@ export default {
               (this.valueLignin === '0% - 10%' && this.valueCellulose === '40% <') ||
               (this.valueLignin === '10% - 20%' && this.valueCellulose === '40% <')) &&
               (this.value1 ==='солома ячменю' || this.value1 === 'вiдходи кукурудзи')){
+
         this.totalResult.preProc.push(
                 {param: 'Метод попередньої обробки', value: 'пар'}
         );
@@ -372,7 +386,7 @@ export default {
                 {param: 'Тривалiсть попередньої обробки', value: ' τ = 1 год'}
         );
         this.totalResult.preProc.push(
-                {param: 'Температура при попереднiй обробцi', value: 'Т = 130-140 °C'}
+                {param: 'Температура при попереднiй обробцi', value: 'Т = 130°C'}
         );
         this.totalResult.preProc.push(
                 {param: 'Тиск при попереднiй обробцi', value: 'Р = 250 кПа'}
@@ -395,9 +409,9 @@ export default {
         }
 
       } else if ((this.valueLignin === '20% - 30%' || this.valueLignin === '30% - 40%' || this.valueLignin === '40% <') &&
-              (this.valueCellulose === '0% - 10%' || this.valueCellulose === '10% - 20%' || this.valueCellulose === '20% - 30%') &&
-              (this.value1 === 'солома пшеницi' || this.value1 === 'вiдходи рiпаку' || this.value1 === 'вiдходи соняшника' ||
-                      this.value1 ===  'деревина берези' || this.value1 === 'деревина сосни')){
+                 (this.valueCellulose === '0% - 10%' || this.valueCellulose === '10% - 20%' || this.valueCellulose === '20% - 30%') &&
+                 (this.value1 === 'солома пшеницi' || this.value1 === 'вiдходи рiпаку' || this.value1 === 'вiдходи соняшника' ||
+                  this.value1 ===  'деревина берези' || this.value1 === 'деревина сосни')){
 
         this.totalResult.preProc.push(
                 {param: 'Метод попередньої обробки', value: 'луг (NaOH)'}
@@ -409,7 +423,7 @@ export default {
                 {param: 'Тривалiсть попередньої обробки', value: ' τ = 2 год.'}
         );
         this.totalResult.preProc.push(
-                {param: 'Температура при попереднiй обробцi', value: 'Т = 120 °C'}
+                {param: 'Температура при попереднiй обробцi', value: 'Т = 120°C'}
         );
         this.totalResult.preProc.push(
                 {param: 'Тиск при попереднiй обробцi', value: 'Р = 180 кПа'}
@@ -484,13 +498,13 @@ export default {
 
 
       this.totalResult.mainProc.push(
-              {param: 'Температура', value: 'Т = 35 °C'}
+              {param: 'Температура', value: 'Т = 35°C'}
       );
       this.totalResult.mainProc.push(
               {param: 'Концентрацiя сировини', value: '30 г/дм3'}
       );
       this.totalResult.mainProc.push(
-              {param: 'Вмiст iнокуляту', value: inoculum.toString()  }
+              {param: 'Вмiст iнокуляту', value: '16.67 %'  }
       );
       this.totalResult.mainProc.push(
               {param: 'Кислотнiть', value: 'рН = 7'}
@@ -568,41 +582,64 @@ export default {
       var stepCount = 0;
 
 
-      if (this.valueLignin === '0% - 10%' ||
-      this.valueLignin === '10% - 20%' ||
-      this.value1 === 'солома пшеницi' ||
-      this.value1 ===  'вiдходи рiпаку' ||
-      this.value1 ===  'вiдходи соняшника' ||
-      this.value1 ===  'деревина берези' ||
-      this.value1 ===  'деревина сосни' ){
+      if ((this.valueLignin === '20% - 30%' || this.valueLignin === '30% - 40%' || this.valueLignin === '40% <') &&
+          (this.valueCellulose === '0% - 10%' || this.valueCellulose === '10% - 20%' || this.valueCellulose === '20% - 30%') &&
+          (this.value1 === 'солома пшеницi' || this.value1 === 'вiдходи рiпаку' || this.value1 === 'вiдходи соняшника' ||
+           this.value1 ===  'деревина берези' || this.value1 === 'деревина сосни')){
+
         this.allStages.stage1.push({
-          stepID: stepCount + 1, stepDesc: 'Підготовка розчину лугу', stepParam: 'С=2-3 моль/дм3, насичений'
+          stepID: stepCount + 1, stepDesc: 'Підготовка розчину лугу', stepParam: 'С=2 моль/дм3, насичений'
         });
         stepCount = stepCount + 1;
+
+        if (this.valueShredding !== '1-3 мм'){
+          this.allStages.stage1.push({
+            stepID: stepCount + 1, stepDesc: 'Подрібнення біоенергетичної сировини', stepParam: 'dч=1-3 мм'
+          });
+
+          this.allStages.stage1.push({
+            stepID: stepCount + 2, stepDesc: 'Попередня обробка сировини', stepParam: 'pH = 5, Р=180 кПа, Т=120°C, τ=2 год.'
+          });
+          stepCount = stepCount + 2;
+        }
+        else {
+          this.allStages.stage1.push({
+            stepID: stepCount + 1, stepDesc: 'Попередня обробка сировини', stepParam: 'pH = 5, Р=180 кПа, Т=120°C, τ=2 год.'
+          });
+          stepCount = stepCount + 1;
+        }
+
       }
-      else {
+
+      else if ((this.valueLignin === '0% - 10%' || this.valueLignin === '10% - 20%') &&
+              (this.valueCellulose === '30% - 40%' || this.valueCellulose === '40% <') &&
+              (this.value1 === 'солома ячменю' || this.value1 === 'вiдходи кукурудзи')){
+
         this.allStages.stage1.push({
-          stepID: stepCount + 1, stepDesc: 'Підготовка пари', stepParam: 'Т=105-110 °C'
+          stepID: stepCount + 1, stepDesc: 'Підготовка пари', stepParam: 'Т=120°C'
         });
         stepCount = stepCount + 1;
+
+        if (this.valueShredding !== '1-3 мм'){
+          this.allStages.stage1.push({
+            stepID: stepCount + 1, stepDesc: 'Подрібнення біоенергетичної сировини', stepParam: 'dч=1-3 мм'
+          });
+
+          this.allStages.stage1.push({
+            stepID: stepCount + 2, stepDesc: 'Попередня обробка сировини', stepParam: 'Ph=5, Р=250 кПа, Т=130°C, τ=1 год.'
+          });
+          stepCount = stepCount + 2;
+        }
+        else {
+          this.allStages.stage1.push({
+            stepID: stepCount + 1, stepDesc: 'Попередня обробка сировини', stepParam: 'Ph=5, Р=250 кПа, Т=130°C, τ=1 год.'
+          });
+          stepCount = stepCount + 1;
+        }
       }
-      if (this.valueShredding !== '1-3 мм'){
-        this.allStages.stage1.push({
-          stepID: stepCount + 1, stepDesc: 'Подрібнення біоенергетичної сировини', stepParam: 'dч=1-3 мм'
-        });
-        this.allStages.stage1.push({
-          stepID: stepCount + 2, stepDesc: 'Попередня обробка сировини', stepParam: 'Р=150-200 кПа, Т=120-150 °C, τ=1 год.'
-        });
-        stepCount = stepCount + 2;
-      }
-      else {
-        this.allStages.stage1.push({
-          stepID: stepCount + 1, stepDesc: 'Попередня обробка сировини', stepParam: 'Р=150-200 кПа, Т=120-150 °C, τ=1 год.'
-        });
-        stepCount = stepCount + 1;
-      }
+
       this.allStages.stage2.push({
-        stepID: stepCount + 1, stepDesc: 'Отримання асоціації мікроорганізмів для деструкції полімерних речовин ', stepParam: 'рН=5-6, Т=35±5 °C, n=10-100об/хв.'
+        stepID: stepCount + 1, stepDesc: 'Отримання асоціації мікроорганізмів для деструкції полімерних речовин ', stepParam: 'рН=7, Т=35°C, n=10 об/хв.'
       });
       stepCount = stepCount + 1;
       this.allStages.stage2.push({
@@ -610,35 +647,35 @@ export default {
       });
       stepCount = stepCount + 1;
       this.allStages.stage2.push({
-        stepID: stepCount + 1, stepDesc: 'Вирощування посівного матеріалу для одержання водню ', stepParam: 'Т=35±5 °С, рН=7±0,5, n=10-100об/хв.'
+        stepID: stepCount + 1, stepDesc: 'Вирощування посівного матеріалу для одержання водню ', stepParam: 'Т=35°С, рН=7±0.5, n=10об/хв.'
       });
       stepCount = stepCount + 1;
       this.allStages.stage3.push({
-        stepID: stepCount + 1, stepDesc: 'Мікробіологічна деструкція біоенергетичної сировини', stepParam: 'Т=35±5 °С, рН=5-6±0,5, n=10-100об/хв.'
+        stepID: stepCount + 1, stepDesc: 'Мікробіологічна деструкція біоенергетичної сировини', stepParam: 'Т=35°С, рН=5±0.5, n=10об/хв.'
       });
       stepCount = stepCount + 1;
       this.allStages.stage4.push({
-        stepID: stepCount + 1, stepDesc: 'Відстоювання', stepParam: 'τ=1год, анаеробні умови'
+        stepID: stepCount + 1, stepDesc: 'Відстоювання', stepParam: 'τ=1 год, анаеробні умови'
       });
       stepCount = stepCount + 1;
       this.allStages.stage5.push({
-        stepID: stepCount + 1, stepDesc: 'Нейтралізація рідини для одержання водню', stepParam: 'рН=7±0,5, n=10-100об/хв, анаеробні умови'
+        stepID: stepCount + 1, stepDesc: 'Нейтралізація рідини для одержання водню', stepParam: 'рН=7±0.5, n=10 об/хв, анаеробні умови'
       });
       stepCount = stepCount + 1;
       this.allStages.stage6.push({
-        stepID: stepCount + 1, stepDesc: 'Одержання біоводню', stepParam: 'Т=35±5 °С, рН=7±0,5, n=10-100об/хв.'
+        stepID: stepCount + 1, stepDesc: 'Одержання біоводню', stepParam: 'Т=35 °С, рН=7±0.5, n=10об/хв.'
       });
       stepCount = stepCount + 1;
       this.allStages.stage7.push({
-        stepID: stepCount + 1, stepDesc: 'Відстоювання', stepParam: 'τ=8-10 год, анаеробні умови'
+        stepID: stepCount + 1, stepDesc: 'Відстоювання', stepParam: 'τ=9 год, анаеробні умови'
       });
       stepCount = stepCount + 1;
       this.allStages.stage8.push({
-        stepID: stepCount + 1, stepDesc: 'Очищення енергоносія від (СО2, Н2S)', stepParam: 'ν=0,5 м3/хв'
+        stepID: stepCount + 1, stepDesc: 'Очищення енергоносія від (СО2, Н2S)', stepParam: 'ν=0.5 м3/хв'
       });
       stepCount = stepCount + 1;
       this.allStages.stage8.push({
-        stepID: stepCount + 1, stepDesc: 'Осушення СН4, або Н2', stepParam: 'τ=1-2 год,  W=0,65'
+        stepID: stepCount + 1, stepDesc: 'Осушення СН4, або Н2', stepParam: 'τ=2 год,  W=0,65'
       });
       stepCount = stepCount + 1;
       this.allStages.stage9.push({
