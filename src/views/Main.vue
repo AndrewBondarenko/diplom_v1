@@ -89,9 +89,9 @@
             </div>
           </div>
           <div class="main-content-input" >
-            <h4>Об'єм заповненого реактора (м3)</h4>
-            <div class="main-content-input_field" :class="{invalidInputValidation: !validationFulness}">
-              <input v-model="valueFulness" type="number" placeholder="Об'єм заповненого біореактора" min="0" />
+            <h4>Маса сировини (кг)</h4>
+            <div class="main-content-input_field" :class="{invalidInputValidation: !validationWeight}">
+              <input v-model="valueWeight" type="number" placeholder="Маса сировини" min="0" />
             </div>
           </div>
           <div class="main-content_input_data-calc">
@@ -142,7 +142,7 @@
 
       </div>
       <div class="main-content_result_title">
-        <h3>Графiки</h3>
+        <h3>Графiк виходу водню</h3>
       </div>
       <div class="main-content_result">
         <div class="main-content-result_description" v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
@@ -150,7 +150,8 @@
 
             <Graph v-if="check"
                    :labels="totalResult.labelsForChart"
-                   :raw="value1">
+                   :raw="value1"
+                   :weightRaw="valueWeight">
             </Graph>
 
           </div>
@@ -232,7 +233,7 @@ export default {
       valueSalts: null,
       valueDryMatter: '',
       valueShredding: null,
-      valueFulness: null,
+      valueWeight: null,
       valuePh: null,
       valueCellulose: null,
       selected: '',
@@ -241,7 +242,7 @@ export default {
       validationSalts: true,
       validationDryMatter: true,
       validationShredding: true,
-      validationFulness: true,
+      validationWeight: true,
       validationPh: true,
       validationCellulose: true,
       processDuration: 0,
@@ -329,7 +330,7 @@ export default {
 
       this.validationShredding = this.valueShredding !== null;
 
-      this.validationFulness = !(this.valueFulness === "" || this.valueFulness === null || this.valueFulness < 0);
+      this.validationWeight = !(this.valueWeight === "" || this.valueWeight === null || this.valueWeight < 0);
 
       this.validationCellulose = this.valueCellulose !== null;
 
@@ -340,7 +341,7 @@ export default {
               this.validationShredding === false ||
               this.validationSalts === false ||
               this.validationDryMatter === false ||
-              this.validationFulness === false ||
+              this.validationWeight === false ||
               this.validationPh === false ||
               this.validationCellulose === false){
         this.validation = false;
@@ -359,7 +360,7 @@ export default {
       this.validationType = '';
       this.statusCalcResultFirstPart = true;
 
-      var inoculum = this.valueFulness * 0.1667;
+      var inoculum =  (this.valueWeight * 0.1667).toFixed(1);
 
       if (this.valueSalts > 15 || this.valuePh > 15){
         this.statusCalcResultFirstPart = false;
@@ -504,7 +505,7 @@ export default {
               {param: 'Концентрацiя сировини', value: '30 г/дм3'}
       );
       this.totalResult.mainProc.push(
-              {param: 'Вмiст iнокуляту', value: '16.67 %'  }
+              {param: 'Вмiст iнокуляту', value: inoculum.toString() + ' кг' }
       );
       this.totalResult.mainProc.push(
               {param: 'Кислотнiть', value: 'рН = 7'}

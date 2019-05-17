@@ -1,15 +1,34 @@
 <template>
-    <div class="main-content-result_graphic">
+    <div class="main-content-result_graphic_container">
+        <div class="main-content-result_graphic">
+            <canvas id="myChart" width="200" height="200"></canvas>
 
-        <canvas id="myChart" width="200" height="200"></canvas>
-
-        <!--<div class="container">-->
-            <!--<div class="Chart__list">-->
-                <!--<div class="Chart">-->
-                    <!--<line-example labels="time"></line-example>-->
+            <!--<div class="container">-->
+                <!--<div class="Chart__list">-->
+                    <!--<div class="Chart">-->
+                        <!--<line-example labels="time"></line-example>-->
+                    <!--</div>-->
                 <!--</div>-->
             <!--</div>-->
-        <!--</div>-->
+        </div>
+
+        <div class="main-content-result_graphic_text">
+            <div class="result_graphic_text_title">
+            </div>
+            <div class="result_graphic_text_description">
+                <h4>На графiку наведено можливий вихід водню з 1 кг сировини в залежності від попередньої обробки сировини </h4>
+                <p>Попередня обробка дозволяє збільшити розміри пор і зменшити
+                    ступінь кристалічності целюлози для доступності ферментів. Одночасно
+                    відбувається знешкодження метаногенних бактерій, які слугують споживачами водню і суттєво зменшують його вихід.</p>
+                <br>
+                <h4>Вхiднi данi</h4>
+                 <p>Сировина: <b> {{ raw }} </b> </p>
+                 <p>Маса: <b> {{ weightRaw }} кг </b></p><br>
+                <h4>Можливий результат</h4>
+                 <p>Об`єм водню з попередньою обробкою: <b> {{ getV1 }} м3 </b></p>
+                 <p>Об`єм водню без попередньої обробки: <b> {{ getV2 }} м3 </b></p><br>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -22,7 +41,8 @@
         },
         props: {
             labels: Number,
-            raw: String
+            raw: String,
+            weightRaw: Number
         },
 
         data(){
@@ -31,7 +51,23 @@
                 dataArray2: '',
             }
         },
+        computed: {
+            getV1: function(){
+                let a = 0;
+                for (var i = 0; i < this.dataArray1.length; i++){
+                    a = a + this.dataArray1[i];
+                }
+                return ((a * this.weightRaw) / 1000 ).toFixed(3)
+            },
+            getV2: function(){
+                let a = 0;
+                for (var i = 0; i < this.dataArray2.length; i++){
+                    a = a + this.dataArray2[i];
+                }
+                return ((a * this.weightRaw) / 1000 ).toFixed(3)
+            },
 
+        },
         methods: {
 
             getRandom: function (min, max) {
@@ -48,7 +84,7 @@
                 }
                 resultArr.push(this.getRandom(value/1.1, value/1.1 + 0.5));
                 resultArr.push(this.getRandom(value/1.2, value/1.2 + 0.5));
-                resultArr.push(this.getRandom(value/1.6, value/1.6 + 0.5));
+                resultArr.push(this.getRandom(value/1.4, value/1.4 + 0.5));
 
                 return resultArr
             },
@@ -105,7 +141,7 @@
                             backgroundColor: ['rgba(255, 255, 204, 0.5)'],
                             data: this.dataArray1
                         },{
-                            label: 'Без попередньоi обробки',
+                            label: 'Без попередньої обробки',
                             borderColor: '#05CBE1',
                             pointBackgroundColor: 'white',
                             pointBorderColor: '#05CBE1',
@@ -119,20 +155,20 @@
                     scales: {
                         yAxes: [{
                             scaleLabel: {
-                                display: false,
-                                labelString: ""
+                                display: true,
+                                labelString: "Об`єм (V)"
                             },
                             ticks: {
-                                beginAtZero: true,
+                                beginAtZero: false,
                                 callback: function(value) {
-                                    return value + " V дм3";
+                                    return value + " дм3";
                                 }
                             }
                         }],
                         xAxes: [{
                             scaleLabel: {
-                                display: false,
-                                labelString: ""
+                                display: true,
+                                labelString: "Час (t)"
                             },
                             ticks: {
                                 callback: function(value) {
@@ -148,8 +184,22 @@
 </script>
 
 <style>
+
+    .main-content-result_graphic_container{
+        display: flex;
+        flex-direction: row;
+
+    }
     .main-content-result_graphic{
-        max-width: 500px;
+        width: 500px;
+        height: 500px;
+        margin: 0 75px 0 0;
+    }
+    .main-content-result_graphic_text{
+        width: 650px;
+    }
+    .main-content-result_graphic_text p, h4{
+        text-align: left;
     }
 
     #myChart {

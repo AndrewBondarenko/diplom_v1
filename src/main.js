@@ -15,11 +15,16 @@ new Vue({
   data: function(){
     return {
       currentUser: '',
-      users: []
+      users: [
+          {username: "test", password: "qwe123"},
+          {username: "test2", password: "qwe123"},
+          {username: "test3", password: "qwe123"}
+      ],
+      // users: [],
     }
   },
   async created() {
-    this.$root.users = await axios.get('http://localhost:5000/api/users');
+    // this.$root.users = await axios.get('http://localhost:5000/api/users');
     this.$root.currentUser = document.cookie.split('=')[1];
   },
   render: function (h) { return h(App) }

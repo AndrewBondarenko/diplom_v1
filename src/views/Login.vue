@@ -50,13 +50,14 @@ export default {
   methods: {
     log: function(login, password) {
 
-      for (var i = 0; i < this.$root.users.data.length; i++) {
-        console.log(password == this.$root.users.data[i].password)
+      for (var i = 0; i < this.$root.users.length; i++) {
+        console.log(password == this.$root.users[i].password)
+        // password == this.$root.users.data[i].password)
         if (
-                login == this.$root.users.data[i].username &&
-                password == this.$root.users.data[i].password
+                login == this.$root.users[i].username &&
+                password == this.$root.users[i].password
         ) {
-          this.$root.currentUser = this.$root.users.data[i].username;
+          this.$root.currentUser = this.$root.users[i].username;
           var v = encodeURIComponent(document.lastModified);
           document.cookie = "user=" + this.$root.currentUser;
           break;
