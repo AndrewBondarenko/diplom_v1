@@ -28,28 +28,43 @@
         data(){
             return {
                 dataArray1: '',
-                dataArray2: ''
+                dataArray2: '',
             }
         },
 
         methods: {
+
+            getRandom: function (min, max) {
+                return Math.random() * (max - min) + min;
+            },
+
+            getRandomArray: function (value){
+                var resultArr = [];
+
+                resultArr.push(this.getRandom(value - 0.5, value));
+
+                for (var i = 0; i < (this.labels / 24) - 4 ; i++){
+                    resultArr.push(this.getRandom(value, value + 1));
+                }
+                resultArr.push(this.getRandom(value/1.1, value/1.1 + 0.5));
+                resultArr.push(this.getRandom(value/1.2, value/1.2 + 0.5));
+                resultArr.push(this.getRandom(value/1.6, value/1.6 + 0.5));
+
+                return resultArr
+            },
+
             generate(val){
-                if(val === 39){
-                    this.dataArray1 = [39, 39.58, 39.2, 39.3, 38.3, 33.8, 23.2];
-                    this.dataArray2 = [27.3, 27.2, 27.4, 27.0, 26.0, 22.6, 14.2]
-                }
-                else if (val === 54) {
-                    this.dataArray1 = [54, 54.58, 54.2, 54.3, 53.3, 43.8, 33.2];
-                    this.dataArray2 = [27.3, 27.2, 27.4, 27.0, 26.0, 22.6, 14.2]
-                }
+                this.dataArray1 = this.getRandomArray(val);
+                this.dataArray2 = this.getRandomArray(val - (val * 0.2));
             }
         },
         mounted() {
 
             let array = [];
             for (var i = 1; i <= this.labels / 24; i++ ){
-                array.push("доба " + i)
+                array.push(i)
             };
+
             console.log(array);
 
             if (this.raw === 'солома пшеницi'){
@@ -77,9 +92,9 @@
             var ctx = document.getElementById('myChart').getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'line',
+                animationEnabled: true,
                 data: {
-                    labels:array,
-
+                    labels: array,
                     datasets: [
                         {
                             label: 'З попередньою обробкою',
@@ -103,8 +118,26 @@
                 options: {
                     scales: {
                         yAxes: [{
+                            scaleLabel: {
+                                display: false,
+                                labelString: ""
+                            },
                             ticks: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                callback: function(value) {
+                                    return value + " V дм3";
+                                }
+                            }
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                                display: false,
+                                labelString: ""
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return "доба " + value;
+                                }
                             }
                         }]
                     }

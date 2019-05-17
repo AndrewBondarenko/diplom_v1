@@ -12,9 +12,9 @@
         <div class="nav-item">
           <router-link v-if="$root.currentUser!=''" to="/main">Головна</router-link>
         </div>
-        <div class="nav-item">
-          <router-link to="/about">Довiдка</router-link>
-        </div>
+        <!--<div class="nav-item">-->
+          <!--<router-link to="/about">Довiдка</router-link>-->
+        <!--</div>-->
         <div @click="unlog" class="nav-item" v-if="$root.currentUser!=''">
           <router-link  to="/login"><span>Вийти</span></router-link>
         </div>
