@@ -111,112 +111,95 @@
           <h2>Результат</h2>
         </div>
       </div>
-      <div class="main-content_result main-content_result_border_top ">
-        <div class="main-content_result_empty"></div>
-      </div>
-      <div class="main-content_result_title">
-        <h3>Основнi параметри процесу</h3>
-      </div>
-      <div class="main-content_result">
-        <div class="main-content-result_description" v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
-
-          <div class="result-item_title">
-            <h4>Попередня обробка сировини</h4>
-          </div>
-          <ResultItem
-                  v-for="result in totalResult.preProc"
-                  v-bind:param="result.param"
-                  v-bind:value="result.value"
-          ></ResultItem>
-          <div class="result-item_title">
-            <h4>Процес видобутку водню</h4>
-          </div>
-          <ResultItem
-                  v-for="result in totalResult.mainProc"
-                  v-bind:param="result.param"
-                  v-bind:value="result.value"
-          ></ResultItem>
-
+      <div v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
+        <div class="main-content_result main-content_result_border_top ">
+          <div class="main-content_result_empty"></div>
         </div>
-
-        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCheckFromIncorrectValues === false)">
-          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
-          <h3>ПЕРЕВIРТЕ ВХIДНI ПОЛЯ:</h3>
-          <h3 v-for="(text, index) in invalidFields">
-            {{ text.text }}
-          </h3>
+        <div class="main-content_result_title">
+          <h3>Основнi параметри процесу</h3>
         </div>
+        <div class="main-content_result">
+          <div class="main-content-result_description" v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
 
-        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
-          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
-        </div>
-        <div class="main-content-result_description main-content-input_empty" v-else>
-          <h3>ФОРМА НЕ ЗАПОВНЕНА</h3>
-        </div>
-
-      </div>
-      <div class="main-content_result_title">
-        <h3>Графiк виходу водню</h3>
-      </div>
-      <div class="main-content_result">
-        <div class="main-content-result_description" v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
-          <div class="main-content-result_graphic_set " >
-
-            <Graph v-if="check"
-                   :labels="totalResult.labelsForChart"
-                   :raw="value1"
-                   :weightRaw="valueWeight">
-            </Graph>
+            <div class="result-item_title">
+              <h4>Попередня обробка сировини</h4>
+            </div>
+            <ResultItem
+                    v-for="result in totalResult.preProc"
+                    v-bind:param="result.param"
+                    v-bind:value="result.value"
+            ></ResultItem>
+            <div class="result-item_title">
+              <h4>Процес видобутку водню</h4>
+            </div>
+            <ResultItem
+                    v-for="result in totalResult.mainProc"
+                    v-bind:param="result.param"
+                    v-bind:value="result.value"
+            ></ResultItem>
 
           </div>
         </div>
-        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCheckFromIncorrectValues === false) && (validationType == 'case0')">
-          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
-          <h3>ПЕРЕВIРТЕ ВМIСТ СОЛЕЙ СИРОВИНИ</h3>
+
+        <div class="main-content_result_title">
+          <h3>Графiк виходу водню</h3>
+        </div>
+        <div class="main-content_result">
+          <div class="main-content-result_description" v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
+            <div class="main-content-result_graphic_set " >
+
+              <Graph v-if="check"
+                     :labels="totalResult.labelsForChart"
+                     :raw="value1"
+                     :weightRaw="valueWeight">
+              </Graph>
+
+            </div>
+          </div>
         </div>
 
-        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
-          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
-          <h3>ПЕРЕВIРТЕ ВХIДНI ДАНI</h3>
+        <div class="main-content_result_title">
+          <h3>Основнi етапи процесу видобутку водню</h3>
         </div>
+        <div class="main-content_result  main-content_result_border_bottom">
+          <div class="main-content-result_description" v-if="allStages.stage1.length != 0">
+            <Stages
+                    v-for="stage in stages"
+                    v-bind:stageNumber="stage.id"
+                    v-bind:stageName="stage.stageName"
+                    v-bind:stageSet="stage.stageSet"
+                    v-bind:allStages="allStages"
+            ></Stages>
+          </div>
 
-        <div class="main-content-result_description main-content-input_empty" v-else>
-          <h3>ФОРМА НЕ ЗАПОВНЕНА</h3>
         </div>
-
       </div>
-      <div class="main-content_result_title">
-        <h3>Основнi етапи процесу видобутку водню</h3>
-      </div>
-      <div class="main-content_result  main-content_result_border_bottom">
-        <div class="main-content-result_description" v-if="allStages.stage1.length != 0">
-          <Stages
-                  v-for="stage in stages"
-                  v-bind:stageNumber="stage.id"
-                  v-bind:stageName="stage.stageName"
-                  v-bind:stageSet="stage.stageSet"
-                  v-bind:allStages="allStages"
-          ></Stages>
-        </div>
+      <div v-else>
+        <div class="main-content_result_invalid">
 
-        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCheckFromIncorrectValues === false) && (validationType == 'case0')">
-          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
-          <h3>ПЕРЕВIРТЕ ВМIСТ СОЛЕЙ СИРОВИНИ</h3>
-        </div>
+          <div class="main-content-result_description main-content-input_empty" v-if = "(statusCheckFromIncorrectValues === false)">
+            <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
+            <h3>ПЕРЕВIРТЕ ВХIДНI ПОЛЯ:</h3>
+            <h3 v-for="(text, index) in invalidFields">
+              {{ text.text }}
+            </h3>
+          </div>
 
-        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart === false) && (validationType == 'case1')">
-          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
-          <h3>ПЕРЕВIРТЕ ВХIДНI ДАНI</h3>
-        </div>
+          <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
+            <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
+          </div>
 
-        <div class="main-content-result_description main-content-input_empty" v-else>
-          <h3>ФОРМА НЕ ЗАПОВНЕНА</h3>
-        </div>
+          <div class="main-content-result_description main-content-input_empty" v-else>
+            <h3>ФОРМА НЕ ЗАПОВНЕНА</h3>
+          </div>
 
+        </div>
       </div>
     </div>
+
   </div>
   <div v-else>
+
        <Login></Login>
   </div>
   </div>
@@ -870,6 +853,14 @@ export default {
     margin: 0 auto
     border-left: 1px solid #262626
     border-right: 1px solid #262626
+
+  .main-content_result_invalid
+    display: flex
+    flex-direction: column
+    width: 90%
+    margin: 0 auto
+    border: 1px solid #262626
+
 
   .main-content_result_border_top
     border-top: 1px solid #262626
