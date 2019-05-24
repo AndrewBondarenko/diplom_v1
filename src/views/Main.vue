@@ -132,6 +132,12 @@
           ></ResultItem>
 
         </div>
+
+        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCheckFromIncorrectValues === false) && (validationType == 'case0')">
+          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
+          <h3>ПЕРЕВIРТЕ ВМIСТ СОЛЕЙ СИРОВИНИ</h3>
+        </div>
+
         <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
           <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
           <h3>ПЕРЕВIРТЕ ВХIДНI ДАНI</h3>
@@ -155,6 +161,10 @@
             </Graph>
 
           </div>
+        </div>
+        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCheckFromIncorrectValues === false) && (validationType == 'case0')">
+          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
+          <h3>ПЕРЕВIРТЕ ВМIСТ СОЛЕЙ СИРОВИНИ</h3>
         </div>
 
         <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
@@ -181,7 +191,12 @@
           ></Stages>
         </div>
 
-        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
+        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCheckFromIncorrectValues === false) && (validationType == 'case0')">
+          <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
+          <h3>ПЕРЕВIРТЕ ВМIСТ СОЛЕЙ СИРОВИНИ</h3>
+        </div>
+
+        <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart === false) && (validationType == 'case1')">
           <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
           <h3>ПЕРЕВIРТЕ ВХIДНI ДАНI</h3>
         </div>
@@ -227,6 +242,7 @@ export default {
       validation: true,
       validationType: "",
       calcStatus: true,
+      statusCheckFromIncorrectValues: true,
       statusCalcResultFirstPart: true,
       value1: null,
       valueLignin: null,
@@ -245,6 +261,7 @@ export default {
       validationWeight: true,
       validationPh: true,
       validationCellulose: true,
+
       processDuration: 0,
       raw: ['солома пшеницi', 'солома ячменю', 'вiдходи кукурудзи', 'вiдходи рiпаку', 'вiдходи соняшника', 'деревина берези', 'деревина сосни'],
       lignin: ['0% - 10%','10% - 20%','20% - 30%','30% - 40%','40% <'],
@@ -312,29 +329,31 @@ export default {
     calcTotalResult: function (e) {
       this.check = false;
       this.check = true;
-      if (this.checkForm() === true){
-        this.calcResultFirstPart();
-        this.calcResult();
+      if (this.checkFormEmpty() === true){
+        if (this.checkFromIncorrectValues() === true){
+          this.calcResultFirstPart();
+          this.calcResult();
+        }
       }
     },
 
-    checkForm: function (e) {
+    checkFormEmpty: function (e) {
 
       this.validationValue1 = this.value1 !== null;
 
       this.validationLignin = this.valueLignin !== null;
 
-      this.validationSalts = !(this.valueSalts === "" || this.valueSalts === null || this.valueSalts < 0);
+      this.validationSalts = !(this.valueSalts === "" || this.valueSalts === null);
 
-      this.validationDryMatter = !(this.valueDryMatter === "" || this.valueDryMatter === null || this.valueDryMatter < 0);
+      this.validationDryMatter = !(this.valueDryMatter === "" || this.valueDryMatter === null);
 
       this.validationShredding = this.valueShredding !== null;
 
-      this.validationWeight = !(this.valueWeight === "" || this.valueWeight === null || this.valueWeight < 0);
+      this.validationWeight = !(this.valueWeight === "" || this.valueWeight === null);
 
       this.validationCellulose = this.valueCellulose !== null;
 
-      this.validationPh = !(this.valuePh === "" || this.valuePh === null || this.valuePh < 0);
+      this.validationPh = !(this.valuePh === "" || this.valuePh === null);
 
       if (this.validationValue1 === false ||
               this.validationLignin === false ||
@@ -353,6 +372,28 @@ export default {
       }
     },
 
+    checkFromIncorrectValues: function(e){
+
+      this.validationType = '';
+      this.statusCheckFromIncorrectValues = true;
+      this.totalResult.preProc.length = 0;
+      this.totalResult.mainProc.length = 0;
+
+      if (this.valueSalts > 10){
+        this.statusCheckFromIncorrectValues = false;
+        this.validationType = "case0";
+        return false
+      }
+      if (this.valuePh > 15){
+        this.statusCheckFromIncorrectValues = false;
+        this.validationType = "case0";
+        return false
+      }
+
+      return true
+    },
+
+
     calcResultFirstPart: function(e){
 
       this.totalResult.preProc.length = 0;
@@ -361,12 +402,6 @@ export default {
       this.statusCalcResultFirstPart = true;
 
       var inoculum =  (this.valueWeight * 0.1667).toFixed(1);
-
-      if (this.valueSalts > 15 || this.valuePh > 15){
-        this.statusCalcResultFirstPart = false;
-        this.validationType = "case1";
-        return false
-      }
 
       if (this.valueShredding !== '1-3 мм'){
         this.totalResult.preProc.push(

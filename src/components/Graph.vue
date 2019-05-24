@@ -20,10 +20,10 @@
                 <p>Попередня обробка дозволяє збільшити розміри пор і зменшити
                     ступінь кристалічності целюлози для доступності ферментів. Одночасно
                     відбувається знешкодження метаногенних бактерій, які слугують споживачами водню і суттєво зменшують його вихід.</p>
-                <br>
+
                 <h4>Вхiднi данi</h4>
                  <p>Сировина: <b> {{ raw }} </b> </p>
-                 <p>Маса: <b> {{ weightRaw }} кг </b></p><br>
+                 <p>Маса: <b> {{ weightRaw }} кг </b></p>
                 <h4>Можливий результат</h4>
                  <p>Об`єм водню з попередньою обробкою: <b> {{ getV1 }} м3 </b></p>
                  <p>Об`єм водню без попередньої обробки: <b> {{ getV2 }} м3 </b></p><br>
@@ -57,14 +57,14 @@
                 for (var i = 0; i < this.dataArray1.length; i++){
                     a = a + this.dataArray1[i];
                 }
-                return ((a * this.weightRaw) / 1000 ).toFixed(3)
+                return ((a * this.weightRaw) / 1000 ).toFixed(1)
             },
             getV2: function(){
                 let a = 0;
                 for (var i = 0; i < this.dataArray2.length; i++){
                     a = a + this.dataArray2[i];
                 }
-                return ((a * this.weightRaw) / 1000 ).toFixed(3)
+                return ((a * this.weightRaw) / 1000 ).toFixed(1)
             },
 
         },
