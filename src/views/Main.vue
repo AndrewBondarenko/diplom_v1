@@ -111,16 +111,18 @@
           <h2>Результат</h2>
         </div>
       </div>
+
       <div v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
+
         <div class="main-content_result main-content_result_border_top ">
           <div class="main-content_result_empty"></div>
         </div>
+
         <div class="main-content_result_title">
           <h3>Основнi параметри процесу</h3>
         </div>
         <div class="main-content_result">
-          <div class="main-content-result_description" v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
-
+          <div class="main-content-result_description">
             <div class="result-item_title">
               <h4>Попередня обробка сировини</h4>
             </div>
@@ -145,7 +147,7 @@
           <h3>Графiк виходу водню</h3>
         </div>
         <div class="main-content_result">
-          <div class="main-content-result_description" v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
+          <div class="main-content-result_description">
             <div class="main-content-result_graphic_set " >
 
               <Graph v-if="check"
@@ -174,6 +176,7 @@
 
         </div>
       </div>
+
       <div v-else>
         <div class="main-content_result_invalid">
 
