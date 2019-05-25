@@ -112,7 +112,7 @@
         },
         mounted() {
             let array = [];
-            for (var i = 0; i <= 15; i++ ){
+            for (var i = 0; i < 15; i++ ){
                 array.push(i*10)
             };
 
@@ -154,7 +154,6 @@
                             pointBackgroundColor: 'white',
                             borderWidth: 4,
                             pointBorderColor: '#FC2525',
-                            backgroundColor: ['rgba(255, 255, 204, 0.5)'],
                             data: this.dataEc1
                         },{
                             label: 'Без попередньої обробки',
@@ -162,7 +161,6 @@
                             pointBackgroundColor: 'white',
                             pointBorderColor: '#05CBE1',
                             borderWidth: 4,
-                            backgroundColor:['rgba(71, 183,132,.3)'],
                             data: this.dataEc2
                         }
                     ]

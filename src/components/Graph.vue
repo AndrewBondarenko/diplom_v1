@@ -41,7 +41,7 @@
                         <h3>Процес з попередньою обробкою</h3>
                     </div>
                     <div class="economic_description_item">
-                        <p>Вартiсть водню: <b> {{ (getV1 * 202.38).toFixed(0) }} грн. </b></p>
+                        <p>Вартiсть отриманого водню: <b> {{ (getV1 * 202.38).toFixed(0) }} грн. </b></p>
                         <p>Витрати на попередню обробку: <b>{{ (weightRaw * 0.096) + (weightRaw * 0.32) }} грн. </b></p>
                         <p>Витрати на основний процес: <b> {{ (labels / 24) * 240 }} грн. </b> </p>
                         <hr>
@@ -55,7 +55,7 @@
                         <h3>Процес без попередньою обробкою</h3>
                     </div>
                     <div class="economic_description_item">
-                        <p>Вартiсть водню: <b> {{ (getV2 * 202.38).toFixed(0) }} грн. </b></p>
+                        <p>Вартiсть отриманого водню: <b> {{ (getV2 * 202.38).toFixed(0) }} грн. </b></p>
                         <p>Витрати на попередню обробку: <b> 0 грн. </b></p>
                         <p>Витрати на основний процес: <b> {{ (labels / 24) * 240 }} грн. </b> </p>
                         <hr>
@@ -241,12 +241,12 @@
 
     }
     .main-content-result_graphic{
-        width: 600px;
+        width: 650px;
         height: 450px;
         margin: 0 75px 0 0;
     }
     .main-content-result_graphic_text{
-        width: 650px;
+        width: 550px;
     }
     .main-content-result_graphic_text p, h4{
         text-align: left;
