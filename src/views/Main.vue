@@ -8,7 +8,7 @@
           <h2>Вхiднi данi</h2>
         </div>
         <div class="main-content_title_text" v-if="validationEmptyZero === false">
-          <h3>Заповнiть всi поля. Значення поля не може бути менше 0</h3>
+          <h3>Заповнiть всi поля. Значення поля не може бути менше ніж 0.</h3>
         </div>
         <!--<div class="main-content_title_text" v-if="validationEmptyZero === true && validationZero === false">-->
           <!--<h3>Значення поля не може бути менше 0</h3>-->
@@ -118,6 +118,25 @@
           <div class="main-content_result_empty"></div>
         </div>
 
+
+        <div class="main-content_result_title">
+          <h3>Графiк виходу водню</h3>
+        </div>
+        <div class="main-content_result">
+          <div class="main-content-result_description">
+            <div class="main-content-result_graphic_set " >
+
+              <Graph v-if="check"
+                     :labels="totalResult.labelsForChart"
+                     :raw="value1"
+                     :weightRaw="valueWeight">
+              </Graph>
+
+            </div>
+          </div>
+        </div>
+
+
         <div class="main-content_result_title">
           <h3>Основнi параметри процесу</h3>
         </div>
@@ -143,22 +162,6 @@
           </div>
         </div>
 
-        <div class="main-content_result_title">
-          <h3>Графiк виходу водню</h3>
-        </div>
-        <div class="main-content_result">
-          <div class="main-content-result_description">
-            <div class="main-content-result_graphic_set " >
-
-              <Graph v-if="check"
-                     :labels="totalResult.labelsForChart"
-                     :raw="value1"
-                     :weightRaw="valueWeight">
-              </Graph>
-
-            </div>
-          </div>
-        </div>
 
         <div class="main-content_result_title">
           <h3>Основнi етапи процесу видобутку водню</h3>
@@ -183,9 +186,11 @@
           <div class="main-content-result_description main-content-input_empty" v-if = "(statusCheckFromIncorrectValues === false)">
             <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
             <h3>ПЕРЕВIРТЕ ВХIДНI ПОЛЯ:</h3>
-            <h3 v-for="(text, index) in invalidFields">
-              {{ text.text }}
-            </h3>
+            <div class="main-content-result_description_invalid">
+              <h3 v-for="(text, index) in invalidFields">
+                {{ text.text }}
+              </h3>
+            </div>
           </div>
 
           <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
@@ -325,6 +330,8 @@ export default {
     calcTotalResult: function (e) {
       this.check = false;
       this.check = true;
+      this.totalResult.preProc.length = 0;
+      this.totalResult.mainProc.length = 0;
       if (this.checkFormEmpty() === true){
         if (this.checkFromIncorrectValues() === true){
           this.calcResultFirstPart();
@@ -845,6 +852,11 @@ export default {
       background-color: #42b983
       color: white
 
+
+  .main-content-result_description_invalid
+    h3
+      opacity: 0.7 !important
+
   .main-content-input_empty
     h3
       opacity: 0.4
@@ -879,8 +891,6 @@ export default {
     width: 100%
     flex-direction: column
     padding-top: 20px
-
-
 
   .main-content_result_title
     display: flex
