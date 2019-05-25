@@ -2,7 +2,7 @@
     <div class="main-content-result_graphic_res">
         <div class="main-content-result_graphic_container">
             <div class="main-content-result_graphic">
-                <canvas id="myChart2" width="200" height="200"></canvas>
+                <canvas id="myChart2" width="10" height="7"></canvas>
 
                 <!--<div class="container">-->
                 <!--<div class="Chart__list">-->
@@ -176,6 +176,7 @@
                     ]
                 },
                 options: {
+                    responsive: true,
                     scales: {
                         yAxes: [{
                             scaleLabel: {
@@ -221,8 +222,8 @@
 
     }
     .main-content-result_graphic{
-       max-width: 750px;
-        height: 450px;
+        width: auto;
+        height: 500px;
         margin: 0 75px 0 0;
     }
     .main-content-result_graphic_text{
@@ -260,7 +261,7 @@
         height: 1px;
     }
     #myChart2 {
-        max-width: 750px;
+        width: auto;
         height: 500px;
     }
 
