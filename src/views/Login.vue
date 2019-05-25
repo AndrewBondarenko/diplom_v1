@@ -44,7 +44,7 @@ export default {
       username: '',
       password: '',
       error: false,
-      validationEmptyZero: false
+      validation: false
     }
   },
   methods: {
