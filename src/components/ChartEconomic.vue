@@ -1,16 +1,8 @@
 <template>
     <div class="main-content-result_graphic_res">
         <div class="main-content-result_graphic_container">
-            <div class="main-content-result_graphic">
-                <canvas id="myChart2" width="10" height="7"></canvas>
-
-                <!--<div class="container">-->
-                <!--<div class="Chart__list">-->
-                <!--<div class="Chart">-->
-                <!--<line-example labels="time"></line-example>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</div>-->
+            <div class="main-content-result_graphic2">
+                <canvas id="myChart2" width="10" height="4"></canvas>
             </div>
 
             <!--<div class="main-content-result_graphic_text">-->
@@ -221,16 +213,17 @@
         flex-direction: column;
 
     }
-    .main-content-result_graphic{
-        width: auto;
-        height: 500px;
-        margin: 0 75px 0 0;
+    .main-content-result_graphic2{
+        width: 100%;
+        height: 600px;
+        margin: 20px auto ;
     }
     .main-content-result_graphic_text{
         width: 650px;
     }
     .main-content-result_graphic_text p, h4{
         text-align: left;
+
     }
 
     .main-content-result_economic_container{
@@ -261,8 +254,8 @@
         height: 1px;
     }
     #myChart2 {
-        width: auto;
-        height: 500px;
+        max-width: 1000px;
+        max-height: 600px;
     }
 
 

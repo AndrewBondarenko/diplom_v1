@@ -2,7 +2,7 @@
     <div class="main-content-result_graphic_res">
         <div class="main-content-result_graphic_container">
             <div class="main-content-result_graphic">
-                <canvas id="myChart" width="200" height="200"></canvas>
+                <canvas id="myChart" width="10" height="9"></canvas>
 
                 <!--<div class="container">-->
                     <!--<div class="Chart__list">-->
@@ -241,7 +241,7 @@
 
     }
     .main-content-result_graphic{
-        width: 500px;
+        width: 600px;
         height: 450px;
         margin: 0 75px 0 0;
     }
