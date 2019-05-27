@@ -44,6 +44,7 @@
                       :show-labels="false"
                       :close-on-select="true"
                       :clear-on-select="false"
+                      @input="check=false"
                       placeholder="Вмiст лiгнiну">
               </multiselect>
             </div>
@@ -58,26 +59,27 @@
                       :show-labels="false"
                       :close-on-select="true"
                       :clear-on-select="false"
-                      placeholder="Вмiст лiгнiну">
+                      @input="check=false"
+                      placeholder="Вмiст целюлози">
               </multiselect>
             </div>
           </div>
           <div class="main-content-input">
             <h4>Вмiст мiнеральних солей (%)</h4>
             <div class="main-content-input_field" :class="{invalidInputValidation: !validationSalts}">
-              <input v-model="valueSalts" type="number" placeholder="Вмiст мiнеральних солей" min="0" />
+              <input v-model="valueSalts" type="number" placeholder="Вмiст мiнеральних солей" min="0" @change="check = false" />
             </div>
           </div>
           <div class="main-content-input">
             <h4>Кислотнiсть (pH)</h4>
            <div class="main-content-input_field" :class="{invalidInputValidation: !validationPh}">
-             <input v-model="valuePh" type="number" placeholder="Кислотнiсть"  min="0"/>
+             <input v-model="valuePh" type="number" placeholder="Кислотнiсть"  min="0"   @change="check = false"/>
            </div>
           </div>
           <div class="main-content-input">
             <h4>Вмiст сухої речовини (г/дм3)</h4>
             <div class="main-content-input_field" :class="{invalidInputValidation: !validationDryMatter}">
-              <input v-model="valueDryMatter" @change="check = false" type="number" placeholder="Вмiст сухої речовини" min="0"/>
+              <input v-model="valueDryMatter"  type="number" placeholder="Вмiст сухої речовини" min="0" @change="check = false"/>
             </div>
           </div>
           <div class="main-content-input">
@@ -90,6 +92,7 @@
                       :show-labels="false"
                       :close-on-select="true"
                       :clear-on-select="false"
+                      @input="check=false"
                       placeholder="Подрiбненiсть">
               </multiselect>
             </div>
@@ -97,7 +100,7 @@
           <div class="main-content-input" >
             <h4>Маса сировини (кг)</h4>
             <div class="main-content-input_field" :class="{invalidInputValidation: !validationWeight}">
-              <input v-model="valueWeight" type="number" placeholder="Маса сировини" min="0" />
+              <input v-model= valueWeight type="number" placeholder="Маса сировини" min="0" @change="check = false"/>
             </div>
           </div>
           <div class="main-content_input_data-calc">
@@ -129,7 +132,7 @@
               <Graph v-if="check"
                      :labels="totalResult.labelsForChart"
                      :raw="value1"
-                     :weightRaw="valueWeight">
+                     :weightRaw= Number(valueWeight)>
               </Graph>
 
             </div>

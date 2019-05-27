@@ -29,7 +29,8 @@
         props: {
             labels: Number,
             raw: String,
-            weightRaw: Number,
+            arr1 : Array,
+            arr2 : Array
         },
 
         data(){
@@ -51,7 +52,7 @@
                 for (var i = 0; i < this.labels / 24; i++){
                     a = a + this.dataArray1[i];
                 }
-                return ((a * w) / 1000 ).toFixed(0)
+                return ((a * w) / 1000 ).toFixed(1)
             },
 
             getEconomicVal_2: function(w){
@@ -59,18 +60,18 @@
                 for (var i = 0; i < this.labels / 24; i++){
                     a = a + this.dataArray2[i];
                 }
-                return ((a * w) / 1000 ).toFixed(0)
+                return ((a * w) / 1000 ).toFixed(1)
             },
 
-            getRandom: function (min, max) {
-                return Math.random() * (max - min) + min;
-            },
+            // getRandom: function (min, max) {
+            //     return Math.random() * (max - min) + min;
+            // },
 
             getEconomicArray1: function (val){
                 var resultArr = [];
                 var cof = 0;
                 for (var i = 0; i < (17); i++){
-                    resultArr.push((((this.getEconomicVal_1(cof) * 202.38).toFixed(0)) - (((cof) * 0.096) + ((cof) * 0.32) + 120) - ((this.labels / 24) * 240)).toFixed(0));
+                    resultArr.push(Math.round(((this.getEconomicVal_1(cof) * 202.38)) - (((cof) * 0.096) + ((cof) * 0.32) + 120) - ((this.labels / 24) * 240)));
                     cof = cof + 10
                 }
 
@@ -80,31 +81,35 @@
                 var resultArr = [];
                 var cof = 0;
                 for (var i = 0; i < (17); i++){
-                    resultArr.push((((this.getEconomicVal_2(cof) * 202.38).toFixed(0))  - ((this.labels / 24) * 240)));
+                    resultArr.push(Math.round(((this.getEconomicVal_2(cof) * 202.38))  - ((this.labels / 24) * 240)));
                     cof = cof + 10
                 }
 
                 return resultArr
             },
 
-            getRandomArray: function (value){
-                var resultArr = [];
-
-                resultArr.push(this.getRandom(value - 0.5, value));
-
-                for (var i = 0; i < (this.labels / 24) - 4 ; i++){
-                    resultArr.push(this.getRandom(value, value + 1));
-                }
-                resultArr.push(this.getRandom(value/1.1, value/1.1 + 0.5));
-                resultArr.push(this.getRandom(value/1.2, value/1.2 + 0.5));
-                resultArr.push(this.getRandom(value/1.4, value/1.4 + 0.5));
-
-                return resultArr
-            },
+            // getRandomArray: function (value){
+            //     var resultArr = [];
+            //
+            //     resultArr.push(this.getRandom(value - 0.5, value));
+            //
+            //     for (var i = 0; i < (this.labels / 24) - 4 ; i++){
+            //         resultArr.push(this.getRandom(value, value + 1));
+            //     }
+            //     resultArr.push(this.getRandom(value/1.1, value/1.1 + 0.5));
+            //     resultArr.push(this.getRandom(value/1.2, value/1.2 + 0.5));
+            //     resultArr.push(this.getRandom(value/1.4, value/1.4 + 0.5));
+            //
+            //     return resultArr
+            // },
 
             generate(val){
-                this.dataArray1 = this.getRandomArray(val);
-                this.dataArray2 = this.getRandomArray(val - (val * 0.2));
+                // this.dataArray1 = this.getRandomArray(val);
+                // this.dataArray2 = this.getRandomArray(val - (val * 0.2));
+                this.dataArray1 = this.arr1;
+                this.dataArray2 = this.arr2;
+                console.log('dataarr2 ' + this.dataArray1);
+                console.log('dataarr2 ' + this.dataArray2);
                 this.dataEc1 = this.getEconomicArray1();
                 this.dataEc2 = this.getEconomicArray2();
             }

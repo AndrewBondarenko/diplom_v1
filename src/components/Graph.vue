@@ -41,11 +41,11 @@
                         <h3>Процес з попередньою обробкою</h3>
                     </div>
                     <div class="economic_description_item">
-                        <p>Вартiсть отриманого водню: <b> {{ (getV1 * 202.38).toFixed(0) }} грн. </b></p>
-                        <p>Витрати на попередню обробку: <b>{{ (weightRaw * 0.096) + (weightRaw * 0.32) + 120 }} грн. </b></p>
+                        <p>Вартiсть отриманого водню: <b> {{ Math.round(getV1 * 202.38) }} грн. </b></p>
+                        <p>Витрати на попередню обробку: <b>{{ Math.round(((weightRaw * 0.096) + (weightRaw * 0.32) + 120)) }} грн. </b></p>
                         <p>Витрати на основний процес: <b> {{ (labels / 24) * 240 }} грн. </b> </p>
                         <hr>
-                        <p>Прибуток: <b> {{ (((getV1 * 202.38).toFixed(0)) - ((weightRaw * 0.096) + (weightRaw * 0.32) + 120) - ((labels / 24) * 240)).toFixed(1)}} грн.</b></p>
+                        <p>Прибуток: <b> {{ Math.round(((getV1 * 202.38)) - ((weightRaw * 0.096) + (weightRaw * 0.32) + 120) - ((labels / 24) * 240)) }} грн.</b></p>
                     </div>
                 </div>
 
@@ -55,23 +55,25 @@
                         <h3>Процес без попередньою обробкою</h3>
                     </div>
                     <div class="economic_description_item">
-                        <p>Вартiсть отриманого водню: <b> {{ (getV2 * 202.38).toFixed(0) }} грн. </b></p>
+                        <p>Вартiсть отриманого водню: <b> {{ Math.round(getV2 * 202.38) }} грн. </b></p>
                         <p>Витрати на попередню обробку: <b> 0 грн. </b></p>
                         <p>Витрати на основний процес: <b> {{ (labels / 24) * 240 }} грн. </b> </p>
                         <hr>
-                        <p>Прибуток: <b> {{ (((getV2 * 202.38).toFixed(0)) - ((labels / 24) * 240)).toFixed(1)}} грн.</b></p>
+                        <p>Прибуток: <b> {{ Math.round(((getV2 * 202.38)) - ((labels / 24) * 240))}} грн.</b></p>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <Charteconomic
-                :labels="labels"
-                :raw="raw"
-                :weightRaw="weightRaw">
-        </Charteconomic>
-
+        <div v-if="calculated">
+            <Charteconomic
+                    :labels= "labels"
+                    :raw="raw"
+                    :arr1 = dataArray1
+                    :arr2 = dataArray2>
+            </Charteconomic>
+        </div>
     </div>
 </template>
 
@@ -94,6 +96,7 @@
             return {
                 dataArray1: '',
                 dataArray2: '',
+                calculated: false
             }
         },
         computed: {
@@ -137,6 +140,8 @@
             generate(val){
                 this.dataArray1 = this.getRandomArray(val);
                 this.dataArray2 = this.getRandomArray(val - (val * 0.2));
+                console.log('dataarr1 ' + this.dataArray1);
+                console.log('dataarr1 ' + this.dataArray2);
             }
         },
         mounted() {
@@ -150,24 +155,31 @@
 
             if (this.raw === 'солома пшеницi'){
                 this.generate(39);
+                this.calculated = true;
             }
             else if (this.raw === 'солома ячменю'){
                 this.generate(54);
+                this.calculated = true;
             }
             else if (this.raw === 'вiдходи кукурудзи'){
                 this.generate(52);
+                this.calculated = true;
             }
             else if (this.raw === 'вiдходи рiпаку'){
                 this.generate(21);
+                this.calculated = true;
             }
             else if (this.raw === 'вiдходи соняшника'){
                 this.generate(30);
+                this.calculated = true;
             }
             else if (this.raw === 'деревина берези'){
                 this.generate(12);
+                this.calculated = true;
             }
             else if (this.raw === 'деревина сосни'){
                 this.generate(14);
+                this.calculated = true;
             }
 
             var ctx = document.getElementById('myChart').getContext('2d');
@@ -254,7 +266,7 @@
 
     .main-content-result_economic_container{
         text-align: left;
-        margin-top: 55px;
+        margin-top: 75px;
     }
     .economic_description{
         display: flex;
