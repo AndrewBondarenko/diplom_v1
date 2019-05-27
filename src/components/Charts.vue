@@ -249,52 +249,49 @@
     }
 </script>
 
-<style>
+<style lang="sass">
 
-    .main-content-result_graphic_res{
-        display: flex;
-        flex-direction: column;
-    }
+    .main-content-result_graphic_res
+        display: flex
+        flex-direction: column
 
-    .main-content-result_process_container{
-        display: flex;
-        flex-direction: row;
+    .main-content-result_process_container
+        display: flex
+        flex-direction: row
 
-    }
-    .main-content-result_process_text{
-        width: 550px;
-    }
-    .main-content-result_process_text p, h4{
-        text-align: left;
-    }
 
-    .main-content-result_economic_container{
-        text-align: left;
-        margin-top: 75px;
-    }
-    .economic_description{
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        justify-content: space-between;
-    }
-    .economic_description_block{
-        width: 49%;
-    }
-    .economic_description_item_title{
-        text-align: left;
-    }
-    .economic_description_item{
-        padding: 0 10px 0 10px;
-        border: 1px solid #bbb;
-        text-align: left;
-    }
-    .economic_description_item hr{
-        border: none;
-        background-color: #bbb;
-        color: #bbb;
-        height: 1px;
-    }
+    .main-content-result_process_text
+        width: 550px
+        p
+            text-align: left
+        h4
+            text-align: left
+
+    .main-content-result_economic_container
+        text-align: left
+        margin-top: 75px
+
+    .economic_description
+        display: flex
+        flex-direction: row
+        width: 100%
+        justify-content: space-between
+
+    .economic_description_block
+        width: 49%
+
+    .economic_description_item_title
+        text-align: left
+
+    .economic_description_item
+        padding: 0 10px 0 10px
+        border: 1px solid #bbb
+        text-align: left
+        hr
+            border: none
+            background-color: #bbb
+            color: #bbb
+            height: 1px
 
 
 

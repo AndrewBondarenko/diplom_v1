@@ -92,7 +92,7 @@
     .main-content-result_graphic_profit{
         width: 100%;
         height: 440px;
-        margin: 20px auto ;
+        margin: 45px auto ;
     }
 
     #myChart2 {
