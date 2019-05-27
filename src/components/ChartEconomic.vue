@@ -1,20 +1,19 @@
 <template>
-    <div class="main-content-result_graphic_res">
-        <div class="main-content-result_graphic_container">
-            <div class="main-content-result_graphic2">
+    <div class="main-content-result_graphic_res_economic">
+        <div class="main-content-result_graphic_container_economic">
+
+            <div class="main-content-result_graphic_text_economic">
+                <div class="result_graphic_text_title_economic">
+                </div>
+                <div class="result_graphic_text_description_economic">
+                    <h4>На графiку наведено можливий прибуток в залежності від ваги сировини. </h4>
+                </div>
+            </div>
+
+            <div class="main-content-result_graphic_economic">
                 <canvas id="myChart2" width="10" height="4"></canvas>
             </div>
 
-            <!--<div class="main-content-result_graphic_text">-->
-                <!--<div class="result_graphic_text_title">-->
-                <!--</div>-->
-                <!--<div class="result_graphic_text_description">-->
-                    <!--<h4>На графiку наведено можливий вихід водню з 1 кг сировини в залежності від попередньої обробки сировини </h4>-->
-                    <!--<p>Попередня обробка дозволяє збільшити розміри пор і зменшити-->
-                        <!--ступінь кристалічності целюлози для доступності ферментів. Одночасно-->
-                        <!--відбувається знешкодження метаногенних бактерій, які слугують споживачами водню і суттєво зменшують його вихід.</p>-->
-                <!--</div>-->
-            <!--</div>-->
         </div>
 
     </div>
@@ -52,7 +51,7 @@
                 for (var i = 0; i < this.labels / 24; i++){
                     a = a + this.dataArray1[i];
                 }
-                return ((a * w) / 1000 ).toFixed(1)
+                return ((a * w) / 1000 ).toFixed(0)
             },
 
             getEconomicVal_2: function(w){
@@ -60,7 +59,7 @@
                 for (var i = 0; i < this.labels / 24; i++){
                     a = a + this.dataArray2[i];
                 }
-                return ((a * w) / 1000 ).toFixed(1)
+                return ((a * w) / 1000 ).toFixed(0)
             },
 
             getRandom: function (min, max) {
@@ -70,8 +69,8 @@
             getEconomicArray1: function (val){
                 var resultArr = [];
                 var cof = 0;
-                for (var i = 0; i < (15); i++){
-                    resultArr.push((((this.getEconomicVal_1(cof) * 202.38).toFixed(0)) - (((cof) * 0.096) + ((cof) * 0.32)) - ((this.labels / 24) * 240)));
+                for (var i = 0; i < (17); i++){
+                    resultArr.push((((this.getEconomicVal_1(cof) * 202.38).toFixed(0)) - (((cof) * 0.096) + ((cof) * 0.32) + 120) - ((this.labels / 24) * 240)).toFixed(0));
                     cof = cof + 10
                 }
 
@@ -80,7 +79,7 @@
             getEconomicArray2: function (val){
                 var resultArr = [];
                 var cof = 0;
-                for (var i = 0; i < (15); i++){
+                for (var i = 0; i < (17); i++){
                     resultArr.push((((this.getEconomicVal_2(cof) * 202.38).toFixed(0))  - ((this.labels / 24) * 240)));
                     cof = cof + 10
                 }
@@ -112,7 +111,7 @@
         },
         mounted() {
             let array = [];
-            for (var i = 0; i < 15; i++ ){
+            for (var i = 0; i < 17; i++ ){
                 array.push(i*10)
             };
 
@@ -153,6 +152,7 @@
                             borderColor: '#FC2525',
                             pointBackgroundColor: 'white',
                             borderWidth: 4,
+                            backgroundColor: 'white',
                             pointBorderColor: '#FC2525',
                             data: this.dataEc1
                         },{
@@ -160,6 +160,7 @@
                             borderColor: '#05CBE1',
                             pointBackgroundColor: 'white',
                             pointBorderColor: '#05CBE1',
+                            backgroundColor: 'white',
                             borderWidth: 4,
                             data: this.dataEc2
                         }
@@ -200,52 +201,33 @@
 
 <style>
 
-    .main-content-result_graphic_res{
+    .main-content-result_graphic_res_economic{
         display: flex;
         flex-direction: column;
         margin: 50px 0 50px 0;
     }
 
-    .main-content-result_graphic_container{
+    .main-content-result_graphic_container_economic{
         display: flex;
         flex-direction: column;
-
     }
-    .main-content-result_graphic2{
+
+    .main-content-result_graphic_economic{
         width: 100%;
-        height: 600px;
+        height: 440px;
         margin: 20px auto ;
     }
-    .main-content-result_graphic_text{
-        width: 650px;
-    }
-    .main-content-result_graphic_text p, h4{
-        text-align: left;
 
-    }
-
-    .main-content-result_economic_container{
-        text-align: left;
-        margin-top: 55px;
-    }
-    .economic_description{
-        display: flex;
-        flex-direction: row;
+    .main-content-result_graphic_text_economic{
         width: 100%;
-        justify-content: space-between;
     }
-    .economic_description_block{
-        width: 49%;
-    }
-    .economic_description_item_title{
+
+    .main-content-result_graphic_text_economic p, h4{
         text-align: left;
+
     }
-    .economic_description_item{
-        padding: 0 10px 0 10px;
-        border: 1px solid #bbb;
-        text-align: left;
-    }
-    .economic_description_item hr{
+
+    .economic_description_item_economic hr{
         border: none;
         background-color: #bbb;
         color: #bbb;

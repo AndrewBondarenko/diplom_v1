@@ -42,10 +42,10 @@
                     </div>
                     <div class="economic_description_item">
                         <p>Вартiсть отриманого водню: <b> {{ (getV1 * 202.38).toFixed(0) }} грн. </b></p>
-                        <p>Витрати на попередню обробку: <b>{{ (weightRaw * 0.096) + (weightRaw * 0.32) }} грн. </b></p>
+                        <p>Витрати на попередню обробку: <b>{{ (weightRaw * 0.096) + (weightRaw * 0.32) + 120 }} грн. </b></p>
                         <p>Витрати на основний процес: <b> {{ (labels / 24) * 240 }} грн. </b> </p>
                         <hr>
-                        <p>Прибуток: <b> {{ (((getV1 * 202.38).toFixed(0)) - ((weightRaw * 0.096) + (weightRaw * 0.32)) - ((labels / 24) * 240)).toFixed(1)}} грн.</b></p>
+                        <p>Прибуток: <b> {{ (((getV1 * 202.38).toFixed(0)) - ((weightRaw * 0.096) + (weightRaw * 0.32) + 120) - ((labels / 24) * 240)).toFixed(1)}} грн.</b></p>
                     </div>
                 </div>
 

@@ -120,7 +120,7 @@
 
 
         <div class="main-content_result_title">
-          <h3>Графiк виходу водню</h3>
+          <h3>Очікуваний результат процесу видобутку водню</h3>
         </div>
         <div class="main-content_result">
           <div class="main-content-result_description">
