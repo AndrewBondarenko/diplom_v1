@@ -20,12 +20,9 @@
 </template>
 
 <script>
-    import LineExample from './LineChart.js'
+
     export default {
         name: 'ChartEconomic',
-        components: {
-            LineExample
-        },
         props: {
             labels: Number,
             raw: String,

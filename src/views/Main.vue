@@ -129,11 +129,17 @@
           <div class="main-content-result_description">
             <div class="main-content-result_graphic_set " >
 
-              <Graph v-if="check"
+              <!--<Graph v-if="check"-->
+                     <!--:labels="totalResult.labelsForChart"-->
+                     <!--:raw="value1"-->
+                     <!--:weightRaw= Number(valueWeight)>-->
+              <!--</Graph>-->
+
+              <Charts v-if="check"
                      :labels="totalResult.labelsForChart"
                      :raw="value1"
                      :weightRaw= Number(valueWeight)>
-              </Graph>
+              </Charts>
 
             </div>
           </div>
@@ -225,6 +231,7 @@ import Stages from '../components/Stage';
 import Login from '../views/Login';
 import ResultItem from '../components/ResultItem';
 import Graph from '../components/Graph'
+import Charts from '../components/Charts'
 
 
 export default {
@@ -235,7 +242,9 @@ export default {
     Steps,
     Stages,
     Login,
-    ResultItem
+    ResultItem,
+    Charts
+
   },
 
   data(){
