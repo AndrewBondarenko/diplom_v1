@@ -1,6 +1,8 @@
 <template>
-  <div>
-  <div v-if="$root.currentUser!=''" class="main">
+  <div ref="content">
+
+  <div v-if="$root.currentUser!=''" class="main" >
+
     <!--<div v-if="$root.currentUser ==''" class="main">-->
     <div class="main-content">
       <div class="main-content_title">
@@ -113,6 +115,9 @@
         <div class="main-content_title_text">
           <h2>Результат</h2>
         </div>
+        <div class="export_result_pdf_button main-content_input_data-calc" v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
+          <button @click="exportPDF">Завантажити PDF</button>
+        </div>
       </div>
 
       <div v-if="(totalResult.preProc.length != 0) && (totalResult.mainProc.length != 0)">
@@ -215,10 +220,12 @@
     </div>
 
   </div>
-  <div v-else>
 
+
+  <div v-else>
        <Login></Login>
   </div>
+
   </div>
 </template>
 
@@ -230,9 +237,11 @@ import Steps from '../components/Step';
 import Stages from '../components/Stage';
 import Login from '../views/Login';
 import ResultItem from '../components/ResultItem';
-import Graph from '../components/Graph'
-import Charts from '../components/Charts'
-
+import Graph from '../components/Graph';
+import Charts from '../components/Charts';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import mainForExport from '../views/MainForExport'
 
 export default {
   name: 'main',
@@ -243,7 +252,9 @@ export default {
     Stages,
     Login,
     ResultItem,
-    Charts
+    Charts,
+    mainForExport
+
 
   },
 
@@ -309,7 +320,7 @@ export default {
         mainProc: [],
         labelsForChart: ''
       },
-
+      base64Img: null,
     }
   },
   watch: {
@@ -771,7 +782,32 @@ export default {
 
     },
 
-  }
+    exportPDF() {
+
+      // const doc = new jsPDF();
+      // const contentHtml = this.$refs.content.innerHTML;
+      // doc.fromHTML(contentHtml, 15, 15, {
+      //   width: 170
+      // });
+      // doc.save("sample.pdf");
+
+      /** WITH CSS */
+
+      const doc = new jsPDF({ format: 'a4', orientation: "landscape"});
+      var canvasElement = document.createElement('canvas');
+
+      html2canvas(this.$refs.content, { canvas: canvasElement
+      }).then(function (canvas) {
+        const img = canvas.toDataURL("image/png");
+        // doc.addImage(img,'JPEG', 40,0);
+        doc.addImage(img,'JPEG', 0,0);
+        doc.save("sample.pdf");
+
+      });
+    },
+
+},
+
 }
 </script>
 
@@ -863,7 +899,8 @@ export default {
       border: 2px solid #42b983
       background-color: #42b983
       color: white
-
+      font-size: 15px
+      font-weight: bold
 
   .main-content-result_description_invalid
     h3
@@ -930,6 +967,10 @@ export default {
     h4
       font-weight: bold
 
+
+
+  .export_result_pdf_button
+    margin: 0 0 0 auto
 
 
   .mainInputMultiselect::v-deep
