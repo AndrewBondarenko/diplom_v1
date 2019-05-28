@@ -800,7 +800,7 @@ export default {
       }).then(function (canvas) {
         const img = canvas.toDataURL("image/png");
         // doc.addImage(img,'JPEG', 40,0);
-        doc.addImage(img,'JPEG', 0,0);
+        doc.addImage(img,'JPEG', -15,0);
         doc.save("sample.pdf");
 
       });
