@@ -1,5 +1,5 @@
 <template>
-  <div ref="content">
+  <div ref="content" id="export-container">
 
   <div v-if="$root.currentUser!=''" class="main" >
 
@@ -453,7 +453,6 @@ export default {
 
     },
 
-
     calcResultFirstPart: function(e){
 
       this.totalResult.preProc.length = 0;
@@ -784,6 +783,97 @@ export default {
 
     exportPDF() {
 
+      var quotes = document.getElementById('export-container');
+      var canvasElement = document.createElement('canvas');
+
+      html2canvas(document.body, { canvas: canvasElement
+         }).then(function (canvas) {
+
+          var contentWidth = canvas.width;
+          var contentHeight = canvas.height;
+
+          //The height of the canvas which one pdf page can show;
+          var pageHeight = contentWidth / 592.28 * 841.89;
+          //the height of canvas that haven't render to pdf
+          var leftHeight = contentHeight;
+          //addImage y-axial offset
+          var position = -35;
+          //a4 format [595.28,841.89]
+          var imgWidth = 595.28;
+          var imgHeight = 592.28/contentWidth * contentHeight;
+
+          var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+          var pdf = new jsPDF('', 'pt', 'a4');
+
+          if (leftHeight < pageHeight) {
+            pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
+          } else {
+            while(leftHeight > 0) {
+              pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+              leftHeight -= pageHeight;
+              position -= 841.89;
+              //avoid blank page
+              if(leftHeight > 0) {
+                pdf.addPage();
+              }
+            }
+          }
+
+          pdf.save('content.pdf');
+      });
+
+
+      // html2canvas(quotes, { canvas: canvasElement
+      // }).then(function (canvas) {
+      //
+      //     //! MAKE YOUR PDF
+      //     var pdf = new jsPDF('p', 'pt', 'letter');
+      //
+      //     for (var i = 0; i <= quotes.clientHeight/980; i++) {
+      //       //! This is all just html2canvas stuff
+      //       var srcImg  = canvas;
+      //       var sX      = 0;
+      //       var sY      = 980*i; // start 980 pixels down for every new page
+      //       var sWidth  = 900;
+      //       var sHeight = 980;
+      //       var dX      = 0;
+      //       var dY      = 0;
+      //       var dWidth  = 900;
+      //       var dHeight = 980;
+      //
+      //       window.onePageCanvas = document.createElement("canvas");
+      //       onePageCanvas.setAttribute('width', 900);
+      //       onePageCanvas.setAttribute('height', 980);
+      //       var ctx = onePageCanvas.getContext('2d');
+      //       // details on this usage of this function:
+      //       // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Using_images#Slicing
+      //       ctx.drawImage(srcImg,sX,sY,sWidth,sHeight,dX,dY,dWidth,dHeight);
+      //
+      //       // document.body.appendChild(canvas);
+      //       var canvasDataURL = onePageCanvas.toDataURL("image/png", 1.0);
+      //
+      //       var width         = onePageCanvas.width;
+      //       var height        = onePageCanvas.clientHeight;
+      //
+      //       //! If we're on anything other than the first page,
+      //       // add another page
+      //       if (i > 0) {
+      //         pdf.addPage(612, 791); //8.5" x 11" in pts (in*72)
+      //       }
+      //       //! now we declare that we're working on that page
+      //       pdf.setPage(i+1);
+      //       //! now we add content to that page!
+      //       pdf.addImage(canvasDataURL, 'PNG', 20, 40, (width*.62), (height*.62));
+      //
+      //     }
+      //      //! after the for loop is finished running, we save the pdf.
+      //      pdf.save('test.pdf');
+      // });
+
+
+
+
       // const doc = new jsPDF();
       // const contentHtml = this.$refs.pdf.innerHTML;
       // doc.fromHTML(contentHtml, 15, 15, {
@@ -801,22 +891,26 @@ export default {
       // doc.save("sample.pdf");
 
 
-      /** WITH CSS */
 
-      const doc = new jsPDF({
-        format: 'a2', orientation: "landscape"});
+      //
+      // /** WITH CSS */
+      //
+      // const doc = new jsPDF({
+      //   format: 'a2', orientation: "landscape"});
+      //
+      // var canvasElement = document.createElement('canvas');
+      //
+      // html2canvas(this.$refs.content, { canvas: canvasElement
+      // }).then(function (canvas) {
+      //   const img = canvas.toDataURL("image/png");
+      //   // doc.addImage(img,'JPEG', 40,0);
+      //   doc.addImage(img,'JPEG', -15,0);
+      //
+      //   doc.save("sample.pdf");
+      //
+      // });
 
-      var canvasElement = document.createElement('canvas');
 
-      html2canvas(this.$refs.content, { canvas: canvasElement
-      }).then(function (canvas) {
-        const img = canvas.toDataURL("image/png");
-        // doc.addImage(img,'JPEG', 40,0);
-        doc.addImage(img,'JPEG', -15,0);
-
-        doc.save("sample.pdf");
-
-      });
 
       //
       // var HTML_Width = this.$refs.content.width();
@@ -848,6 +942,8 @@ export default {
       //
       //   pdf.save("HTML-Document.pdf");
       // });
+
+
     },
 
 },
