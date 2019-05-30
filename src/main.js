@@ -16,6 +16,7 @@ new Vue({
   data: function(){
     return {
       currentUser: '',
+      file: '',
       users: [],
 
       // users: [

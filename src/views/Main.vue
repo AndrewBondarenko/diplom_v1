@@ -9,12 +9,21 @@
         <div class="main-content_title_text">
           <h2>Вхiднi данi</h2>
         </div>
+
         <div class="main-content_title_text" v-if="validationEmptyZero === false">
-          <h3>Заповнiть всi поля. Значення поля не може бути менше ніж 0.</h3>
+          <h3>Заповнiть всi поля. {{ validationFormMessage }} </h3>
         </div>
-        <!--<div class="main-content_title_text" v-if="validationEmptyZero === true && validationZero === false">-->
-          <!--<h3>Значення поля не може бути менше 0</h3>-->
+
+        <!--<div class="main-content_title_text" v-if="(validationEmptyZero == false) && (validationZero == false)">-->
+          <!--<h3>Заповнiть всi поля. Значення поля <b>Маса сировини (кг)</b> має бути більше 0. Значення інших полів не може бути менші ніж 0. </h3>-->
         <!--</div>-->
+        <!--<div class="main-content_title_text" v-if="validationEmptyZero === false && validationZero === true">-->
+          <!--<h3>Заповнiть всi поля. Значення поля не може бути менше ніж 0.</h3>-->
+        <!--</div>-->
+        <!--<div class="main-content_title_text" v-if="validationEmptyZero === true && validationZero === false">-->
+          <!--<h3>Значення поля <b>Маса сировини (кг)</b>має бути більше ніж 0.</h3>-->
+        <!--</div>-->
+
         <!--<div class="main-content_title_text" v-if="validationEmptyZero === false && validationZero === false">-->
           <!--<h3>Заповнiть всi поля. Значення поля не може бути менше 0</h3>-->
         <!--</div>-->
@@ -198,7 +207,7 @@
         <div class="main-content_result_invalid">
 
           <div class="main-content-result_description main-content-input_empty" v-if = "(statusCheckFromIncorrectValues === false)">
-            <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
+            <h3>НЕ КОРЕКТНІ ВХІДНІ ДАНІ</h3>
             <h3>ПЕРЕВIРТЕ ВХIДНI ПОЛЯ:</h3>
             <div class="main-content-result_description_invalid">
               <h3 v-for="(text, index) in invalidFields">
@@ -208,7 +217,7 @@
           </div>
 
           <div class="main-content-result_description main-content-input_empty" v-else-if = "(statusCalcResultFirstPart == false) && (validationType == 'case1')">
-            <h3>СИРОВИНА НЕ ПРИДАТНА ДЛЯ ВИКОРИСТАННЯ</h3>
+            <h3>СИРОВИНА З ТАКИМ КОМПОНЕНТНИМ СКЛАДОМ НЕ ПРИДАТНА ДЛЯ ВИДОБУТКУ ВОДНЮ</h3>
           </div>
 
           <div class="main-content-result_description main-content-input_empty" v-else>
@@ -264,6 +273,7 @@ export default {
       validationEmptyZero: true,
       validationZero: true,
       validationType: "",
+      validationFormMessage: "",
       calcStatus: true,
       statusCheckFromIncorrectValues: true,
       statusCalcResultFirstPart: true,
@@ -355,7 +365,7 @@ export default {
       this.check = true;
       this.totalResult.preProc.length = 0;
       this.totalResult.mainProc.length = 0;
-      if (this.checkFormEmpty() === true){
+      if ( this.checkFormEmpty() === true ){
         if (this.checkFromIncorrectValues() === true){
           this.calcResultFirstPart();
           this.calcResult();
@@ -364,20 +374,10 @@ export default {
     },
 
     // checkFormZero: function(e){
-    //   this.validationZero = true;
     //
-    //   this.validationSalts = !(this.valueSalts < 0);
-    //
-    //   this.validationDryMatter = !(this.valueDryMatter < 0);
-    //
-    //   this.validationWeight = !(this.valueWeight < 0);
-    //
-    //   this.validationPh = !(this.valuePh < 0);
-    //
-    //   if (this.validationSalts === false ||
-    //           this.validationDryMatter === false ||
-    //           this.validationWeight === false ||
-    //           this.validationPh === false){
+    //   this.validationWeight = !(this.valueWeight == "" || this.valueWeight == null || this.valueWeight < 0 || this.valueWeight == 0);
+    //   console.log('Weight ' + this.validationWeight);
+    //   if (this.validationWeight === false){
     //     this.validationZero = false;
     //     return false
     //   }
@@ -393,17 +393,18 @@ export default {
 
       this.validationLignin = this.valueLignin !== null;
 
-      this.validationSalts = !(this.valueSalts === "" || this.valueSalts === null || this.valueSalts < 0);
+      this.validationSalts = !(this.valueSalts === "" || this.valueSalts === null);
 
-      this.validationDryMatter = !(this.valueDryMatter === "" || this.valueDryMatter === null || this.valueDryMatter < 0);
+      this.validationDryMatter = !(this.valueDryMatter === "" || this.valueDryMatter === null);
 
       this.validationShredding = this.valueShredding !== null;
 
-      this.validationWeight = !(this.valueWeight === "" || this.valueWeight === null || this.valueWeight < 0);
+      this.validationWeight = !(this.valueWeight === "" || this.valueWeight === null);
 
       this.validationCellulose = this.valueCellulose !== null;
 
-      this.validationPh = !(this.valuePh === "" || this.valuePh === null || this.valuePh < 0);
+      this.validationPh = !(this.valuePh === "" || this.valuePh === null );
+
 
       if (this.validationValue1 === false ||
               this.validationLignin === false ||
@@ -427,28 +428,34 @@ export default {
       this.validationPh = true;
       this.validationSalts = true;
       this.validationDryMatter = true;
+      this.validationWeight = true;
       this.statusCheckFromIncorrectValues = true;
       this.totalResult.preProc.length = 0;
       this.totalResult.mainProc.length = 0;
       this.invalidFields.length = 0;
 
-      if (this.valueSalts > 10){
+      if (this.valueSalts > 15 || this.valueSalts < 0 ){
         this.statusCheckFromIncorrectValues = false;
-        this.invalidFields.push({text: "Вмiст мiнеральних солей (%)"});
+        this.invalidFields.push({text: "Вмiст мiнеральних солей (%) ( 0 < 'Вмiст мiнеральних солей (%)' < 15)"});
         this.validationSalts = false
 
       }
-      if (this.valuePh > 15){
+      if (this.valuePh > 13 || this.valuePh < 0){
         this.statusCheckFromIncorrectValues = false;
-        this.invalidFields.push({text: "Кислотнiсть (pH)"});
+        this.invalidFields.push({text: "Кислотнiсть (pH) ( 0 < 'Кислотнiсть (pH)' < 13)" });
         this.validationPh = false
       }
-      if (this.valueDryMatter > 150){
+      if (this.valueDryMatter > 150 || this.valueDryMatter <= 0){
         this.statusCheckFromIncorrectValues = false;
-        this.invalidFields.push({text: "Вмiст сухої речовини (г/дм3)"});
+        this.invalidFields.push({text: "Вмiст сухої речовини (г/дм3) ( 0 < 'Вмiст сухої речовини (г/дм3)' < 150)"});
         this.validationDryMatter = false
       }
 
+      if (this.valueWeight <= 0){
+        this.statusCheckFromIncorrectValues = false;
+        this.invalidFields.push({text: "Маса сировини (кг) ( 0 < 'Маса сировини (кг)' )"});
+        this.validationWeight = false
+      }
       return this.invalidFields.length === 0;
 
     },
@@ -819,8 +826,12 @@ export default {
               }
             }
           }
+          var obj = new Date();
+          pdf.save('DMY-'  + obj.getUTCDate() +  '/' + (obj.getUTCMonth() + 1) + '/' +
+                  obj.getUTCFullYear() + '-' + obj.getTime() + '.pdf');
+          console.log(pdf);
+          pdf.output('dataurlnewwindow');
 
-          pdf.save('content.pdf');
       });
 
 
