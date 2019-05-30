@@ -75,8 +75,8 @@
 </template>
 
 <script>
-    import ChartProfit from '../components/ChartProfit'
-    import ChartProcess from '../components/ChartProcess'
+    import ChartProfit from '../components/ChartProfit';
+    import ChartProcess from '../components/ChartProcess';
 
     export default {
         name: 'Charts',
@@ -130,7 +130,7 @@
                     return ((weightR* 0.096) + (weightR* 0.32) + 120)
                 }
                 else{
-                    return ((weightR * 0.5 * 0.08) + (weightR * 10 * 0.75) + 120)
+                    return ((weightR * 0.5 * 0.08) + (weightR * 0.5 * 0.75) + 120)
                 }
             },
 
@@ -144,7 +144,7 @@
 
             getLabelsArrayProfit: function() {
                 let array = [];
-                for (var i = 0; i < 100; i++ ){
+                for (var i = 0; i < 50; i++ ){
                     array.push(i*10)
                 }
                 return array
@@ -188,8 +188,8 @@
             getEconomicArray1: function (val){
                 var resultArr = [];
                 var cof = 0;
-                for (var i = 0; i < (100); i++){
-                    resultArr.push(Math.round(((this.getEconomicVal_1(cof) * 85)) - (this.getPreProcValue(this.raw, this.weightRaw)) - ((this.labels / 24) * 24)));
+                for (var i = 0; i < (50); i++){
+                    resultArr.push(Math.round(((this.getEconomicVal_1(cof) * 85)) - (this.getPreProcValue(this.raw, cof)) - ((this.labels / 24) * 24)));
                     cof = cof + 10
                 }
 
@@ -198,7 +198,7 @@
             getEconomicArray2: function (val){
                 var resultArr = [];
                 var cof = 0;
-                for (var i = 0; i < (100); i++){
+                for (var i = 0; i < (50); i++){
                     resultArr.push(Math.round(((this.getEconomicVal_2(cof) * 85))  - ((this.labels / 24) * 24)));
                     cof = cof + 10
                 }
@@ -280,7 +280,7 @@
 
     .main-content-result_economic_container
         text-align: left
-        margin-top: 75px
+        margin-top: 20px
 
     .economic_description
         display: flex

@@ -25,7 +25,7 @@
           <h3>Авторизацiя прошла успiшно</h3>
           <img src="../assets/images/done.png" alt="done">
           <h3>
-            <router-link to="/main">Перейти на головну сторiнку</router-link>
+            <router-link to="/main">Перейти на до Кабінету користувача</router-link>
           </h3>
         </div>
       </div>

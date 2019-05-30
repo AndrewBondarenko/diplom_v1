@@ -80,6 +80,7 @@
 <script>
     import LineExample from './LineChart.js';
     import Charteconomic from '../components/ChartEconomic'
+
     export default {
         name: 'graph',
         components: {
