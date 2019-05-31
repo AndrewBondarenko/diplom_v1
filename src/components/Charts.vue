@@ -35,34 +35,36 @@
             <div class="economic_description">
                 <div class="economic_description_block">
                     <div class="economic_description_item_title">
-                        <h3>Процес з попередньою обробкою</h3>
+                        <h4>Процес з попередньою обробкою</h4>
                     </div>
                     <div class="economic_description_item">
                         <p>Вартiсть отриманого водню: <b> {{ Math.round(getV1 * 85) }} грн. </b></p>
                         <p>Витрати на попередню обробку: <b>{{ Math.round(getPreProcValue(this.raw, this.weightRaw)) }} грн. </b></p>
-                        <p>Витрати на основний процес: <b> {{ (labels / 24) * 24 }} грн. </b> </p>
+                        <p>Витрати на основний процес: <b> {{ (labels / 24) * 87 }} грн. </b> </p>
                         <hr>
-                        <p>Прибуток: <b> {{ Math.round(((getV1 * 85)) - (getPreProcValue(this.raw, this.weightRaw)) - ((labels / 24) * 24)) }} грн.</b></p>
+                        <p>Прибуток: <b> {{ Math.round(((getV1 * 85)) - (getPreProcValue(this.raw, this.weightRaw)) - ((labels / 24) * 87)) }} грн.</b></p>
                     </div>
                 </div>
 
 
                 <div class="economic_description_block">
                     <div class="economic_description_item_title">
-                        <h3>Процес без попередньою обробкою</h3>
+                        <h4>Процес без попередньою обробкою</h4>
                     </div>
                     <div class="economic_description_item">
                         <p>Вартiсть отриманого водню: <b> {{ Math.round(getV2 * 85) }} грн. </b></p>
                         <p>Витрати на попередню обробку: <b> 0 грн. </b></p>
-                        <p>Витрати на основний процес: <b> {{ (labels / 24) * 24 }} грн. </b> </p>
+                        <p>Витрати на основний процес: <b> {{ (labels / 24) * 87 }} грн. </b> </p>
                         <hr>
-                        <p>Прибуток: <b> {{ Math.round(((getV2 * 85)) - ((labels / 24) * 24))}} грн.</b></p>
+                        <p>Прибуток: <b> {{ Math.round(((getV2 * 85)) - ((labels / 24) * 87))}} грн.</b></p>
                     </div>
                 </div>
             </div>
 
         </div>
-
+        <div class="result_profit_text_title">
+            <h3>Графік залежності можливого прибутку від маси сировини ( {{this.raw}} )</h3>
+        </div>
         <div v-if="calculated">
             <ChartProfit
                     :labels = labelsArrayProfit
@@ -109,14 +111,14 @@
                 for (var i = 0; i < this.dataArray1.length; i++){
                     a = a + this.dataArray1[i];
                 }
-                return ((a * this.weightRaw) / 10000 ).toFixed(1)
+                return ((a * this.weightRaw) / 1000 ).toFixed(1)
             },
             getV2: function(){
                 let a = 0;
                 for (var i = 0; i < this.dataArray2.length; i++){
                     a = a + this.dataArray2[i];
                 }
-                return ((a * this.weightRaw) / 10000 ).toFixed(1)
+                return ((a * this.weightRaw) / 1000 ).toFixed(1)
             },
 
 
@@ -130,7 +132,7 @@
                     return ((weightR* 0.096) + (weightR* 0.32) + 120)
                 }
                 else{
-                    return ((weightR * 0.5 * 0.08) + (weightR * 0.5 * 0.75) + 120)
+                    return ((weightR * 4 * 0.08) + (weightR * 0.5 * 0.75) + 120)
                 }
             },
 
@@ -174,7 +176,7 @@
                 for (var i = 0; i < this.labels / 24; i++){
                     a = a + this.dataArray1[i];
                 }
-                return ((a * w) / 10000 ).toFixed(1)
+                return ((a * w) / 1000 ).toFixed(1)
             },
 
             getEconomicVal_2: function(w){
@@ -182,14 +184,14 @@
                 for (var i = 0; i < this.labels / 24; i++){
                     a = a + this.dataArray2[i];
                 }
-                return ((a * w) / 10000 ).toFixed(1)
+                return ((a * w) / 1000 ).toFixed(1)
             },
 
             getEconomicArray1: function (val){
                 var resultArr = [];
                 var cof = 0;
                 for (var i = 0; i < (50); i++){
-                    resultArr.push(Math.round(((this.getEconomicVal_1(cof) * 85)) - (this.getPreProcValue(this.raw, cof)) - ((this.labels / 24) * 24)));
+                    resultArr.push(Math.round(((this.getEconomicVal_1(cof) * 85)) - (this.getPreProcValue(this.raw, cof)) - ((this.labels / 24) * 87)));
                     cof = cof + 10
                 }
 
@@ -199,7 +201,7 @@
                 var resultArr = [];
                 var cof = 0;
                 for (var i = 0; i < (50); i++){
-                    resultArr.push(Math.round(((this.getEconomicVal_2(cof) * 85))  - ((this.labels / 24) * 24)));
+                    resultArr.push(Math.round(((this.getEconomicVal_2(cof) * 85))  - ((this.labels / 24) * 87)));
                     cof = cof + 10
                 }
 
@@ -304,6 +306,7 @@
             color: #bbb
             height: 1px
 
-
+    .result_profit_text_title
+      margin: 10px auto 0 0
 
 </style>

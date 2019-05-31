@@ -72,7 +72,7 @@
                         xAxes: [{
                             scaleLabel: {
                                 display: true,
-                                labelString: "Вага сировини (кг)"
+                                labelString: "Маса сировини (кг)"
                             },
                             ticks: {
                                 callback: function(value) {
